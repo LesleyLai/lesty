@@ -51,11 +51,11 @@ endif ()
 # tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(BP_ENABLE_IPO
+option(LESTY_ENABLE_IPO
         "Enable Interprocedural optimization, aka Link Time Optimization (LTO)"
         OFF)
 
-if (BP_ENABLE_IPO)
+if (LESTY_ENABLE_IPO)
     include(CheckIPOSupported)
     check_ipo_supported(RESULT result OUTPUT output)
     if (result)

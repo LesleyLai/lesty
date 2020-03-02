@@ -1,8 +1,8 @@
-#include <iostream>
+#include <fmt/format.h>
 
 #include "dummy.hpp"
 
 auto main() -> int
 {
-  std::cout << fib(10) << '\n';
+  fmt::print("fib(10) = {}\n", fib(10));
 }
