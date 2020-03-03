@@ -4,6 +4,7 @@ target_link_libraries(lesty-cli
         lesty::lesty
         #lesty::compiler_options
         CONAN_PKG::nlohmann_json
+        CONAN_PKG::docopt.cpp
         )
 add_clangformat(lesty-cli)
 

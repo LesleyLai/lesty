@@ -53,7 +53,7 @@ Path_tracer::Path_tracer()
           indicators::option::Lead{">"},
           indicators::option::Remainder{" "},
           indicators::option::End{"]"},
-          indicators::option::PostfixText{"Extracting Archive"},
+          indicators::option::PostfixText{"Rendering"},
           indicators::option::ForegroundColor{indicators::Color::green}}
 {
 }

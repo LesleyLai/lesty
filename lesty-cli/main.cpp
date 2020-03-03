@@ -5,6 +5,9 @@
 #include <stdexcept>
 #include <vector>
 
+#include <docopt/docopt.h>
+#include <fmt/format.h>
+
 #include "axis_aligned_rect.hpp"
 #include "bounding_volume_hierarchy.hpp"
 #include "image.hpp"
@@ -72,41 +75,70 @@ void print_elapse_time(const Duration& elapsed_time)
   }
 }
 
-int main()
+static const char USAGE[] =
+    R"(Lesty
+
+    Usage:
+      lesty FILE [options]
+      lesty (-h | --help)
+      lesty (-v | --version)
+
+    Options:
+      -h --help               Show this screen.
+      -v --version            Show version.
+      --spp=<s>               Samples per pixel, only useful for algorithms that support it [default: 10].
+      -o FILE, --output FILE  Name of the output image
+      --width n               The pixel width of the output image [default: 800].
+      --height n              The pixel height of the output image [default: 600].
+)";
+
+int main(int argc, const char** argv)
 try {
   using namespace std::chrono;
   using namespace beyond::literals;
 
+  std::map<std::string, docopt::value> args =
+      docopt::docopt(USAGE, {argv + 1, argv + argc}, true, "lesty 0.0.0");
+
+  const std::string input_file = args["FILE"].asString();
+  fmt::print("Reading from {}\n", input_file);
+
+  const std::string output_file = [&]() {
+    const auto arg = args["--output"];
+    if (arg) {
+      return arg.asString();
+    } else {
+      return std::string{"output.png"};
+    }
+  }();
+
+  const auto spp = args["--spp"].asLong();
+  const auto width = static_cast<size_t>(args["--width"].asLong());
+  const auto height = static_cast<size_t>(args["--height"].asLong());
+
+  fmt::print("width: {}, height: {}, sample size: {}\n", width, height, spp);
+
   Path_tracer path_tracer;
 
-  constexpr int width = 800, height = 600;
   Image image(width, height);
 
-  constexpr auto aspect_ratio = static_cast<float>(width) / height;
+  const auto aspect_ratio = static_cast<float>(width) / height;
   Camera camera{
       {278, 278, -800}, {278, 278, 0}, {0, 1, 0}, 40.0_deg, aspect_ratio};
   const auto scene = create_scene();
 
   const auto start = std::chrono::system_clock::now();
-  path_tracer.run(scene, camera, image, 500);
+  path_tracer.run(scene, camera, image, static_cast<size_t>(spp));
   const auto end = std::chrono::system_clock::now();
 
   std::puts("elapsed time: ");
   print_elapse_time(end - start);
 
-  std::string filename{"test.png"};
-  image.saveto(filename);
-  std::cout << "Save image to " << filename << ".\n";
+  image.saveto(output_file);
+  fmt::print("Save image to {}\n", output_file);
   return 0;
-} catch (const Cannot_write_file& e) {
-  std::cerr << "Cannot write to file: " << e.what() << '\n';
-  return -1;
-} catch (const Unsupported_image_extension& e) {
-  std::cerr << "Unsupported image extension: " << e.what() << '\n';
-  std::fputs("Currently: only ppm output is supported", stderr);
-  return -2;
 } catch (const std::exception& e) {
-  std::cerr << "Error: " << e.what() << '\n';
+  fmt::print(stderr, "Error: {}\n", e.what());
   throw e;
 } catch (...) {
   std::fputs("Unknown exception", stderr);
