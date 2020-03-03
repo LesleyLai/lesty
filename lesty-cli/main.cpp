@@ -2,10 +2,8 @@
 #include <cstdio>
 #include <iostream>
 #include <memory>
-#include <stdexcept>
 #include <vector>
 
-#include <docopt/docopt.h>
 #include <fmt/format.h>
 
 #include "axis_aligned_rect.hpp"
@@ -23,8 +21,8 @@ const Lambertian red{Color(0.65f, 0.05f, 0.05f)};
 const Lambertian white{Color(0.73f, 0.73f, 0.73f)};
 const Lambertian green{Color(0.12f, 0.45f, 0.15f)};
 const Emission light{Color(1, 1, 1)};
-const Metal metal{Color(0.73f, 0.73f, 0.73f), 0.8};
-const Dielectric glass(Color(1.f, 1.f, 1.f), 0.1, 1.655);
+const Metal metal{Color(0.73f, 0.73f, 0.73f), 0.8f};
+const Dielectric glass(Color(1.f, 1.f, 1.f), 1.655f);
 } // namespace
 
 Scene create_scene()
@@ -33,28 +31,29 @@ Scene create_scene()
   std::vector<std::unique_ptr<Material>> materials;
 
   objects.push_back(std::make_unique<Rect_YZ>(
-      beyond::Point2f(0, 0), beyond::Point2f(555, 555), 555, green,
+      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 555.f, green,
       Normal_Direction::Negetive));
   objects.push_back(std::make_unique<Rect_YZ>(
-      beyond::Point2f(0, 0), beyond::Point2f(555, 555), 0, red));
+      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 0.f, red));
 
+  objects.push_back(std::make_unique<Rect_XZ>(beyond::Point2f(213.f, 227.f),
+                                              beyond::Point2f(343.f, 332.f),
+                                              554.f, light));
   objects.push_back(std::make_unique<Rect_XZ>(
-      beyond::Point2f(213, 227), beyond::Point2f(343, 332), 554, light));
-  objects.push_back(std::make_unique<Rect_XZ>(
-      beyond::Point2f(0, 0), beyond::Point2f(555, 555), 555, white,
+      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 555.f, white,
       Normal_Direction::Negetive));
   objects.push_back(std::make_unique<Rect_XZ>(
-      beyond::Point2f(0, 0), beyond::Point2f(555, 555), 0, white));
+      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 0.f, white));
 
   objects.push_back(std::make_unique<Rect_XY>(
-      beyond::Point2f(0, 0), beyond::Point2f(555, 555), 555, white,
+      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 555.f, white,
       Normal_Direction::Negetive));
 
-  objects.push_back(
-      std::make_unique<Sphere>(beyond::Point3f{200, 100, 300}, 100, metal));
+  objects.push_back(std::make_unique<Sphere>(
+      beyond::Point3f{200.f, 100.f, 300.f}, 100.f, metal));
 
-  objects.push_back(
-      std::make_unique<Sphere>(beyond::Point3f{300, 110, 100}, 100, glass));
+  objects.push_back(std::make_unique<Sphere>(
+      beyond::Point3f{300.f, 110.f, 100.f}, 100.f, glass));
 
   return Scene(std::make_unique<BVH_node>(objects.begin(), objects.end()),
                std::move(materials));
@@ -75,46 +74,55 @@ void print_elapse_time(const Duration& elapsed_time)
   }
 }
 
-static const char USAGE[] =
-    R"(Lesty
+// static const char USAGE[] =
+//    R"(Lesty
+//
+//    Usage:
+//      lesty FILE [options]
+//      lesty (-h | --help)
+//      lesty (-v | --version)
+//
+//    Options:
+//      -h --help               Show this screen.
+//      -v --version            Show version.
+//      --spp=<s>               Samples per pixel, only useful for algorithms
+//      that support it [default: 10]. -o FILE, --output FILE  Name of the
+//      output image
+//      --width n               The pixel width of the output image [default:
+//      800].
+//      --height n              The pixel height of the output image [default:
+//      600].
+//)";
 
-    Usage:
-      lesty FILE [options]
-      lesty (-h | --help)
-      lesty (-v | --version)
-
-    Options:
-      -h --help               Show this screen.
-      -v --version            Show version.
-      --spp=<s>               Samples per pixel, only useful for algorithms that support it [default: 10].
-      -o FILE, --output FILE  Name of the output image
-      --width n               The pixel width of the output image [default: 800].
-      --height n              The pixel height of the output image [default: 600].
-)";
-
-int main(int argc, const char** argv)
+int main(/*int argc, const char** argv*/)
 try {
   using namespace std::chrono;
   using namespace beyond::literals;
 
-  std::map<std::string, docopt::value> args =
-      docopt::docopt(USAGE, {argv + 1, argv + argc}, true, "lesty 0.0.0");
+  //  std::map<std::string, docopt::value> args =
+  //      docopt::docopt(USAGE, {argv + 1, argv + argc}, true, "lesty 0.0.0");
+  //
+  //  const std::string input_file = args["FILE"].asString();
+  //  fmt::print("Reading from {}\n", input_file);
+  //
+  //  const std::string output_file = [&]() {
+  //    const auto arg = args["--output"];
+  //    if (arg) {
+  //      return arg.asString();
+  //    } else {
+  //      return std::string{"output.png"};
+  //    }
+  //  }();
+  //
+  //  const auto spp = args["--spp"].asLong();
+  //  const auto width = static_cast<size_t>(args["--width"].asLong());
+  //  const auto height = static_cast<size_t>(args["--height"].asLong());
 
-  const std::string input_file = args["FILE"].asString();
-  fmt::print("Reading from {}\n", input_file);
+  const auto spp = 100;
+  const auto width = 800;
+  const auto height = 600;
 
-  const std::string output_file = [&]() {
-    const auto arg = args["--output"];
-    if (arg) {
-      return arg.asString();
-    } else {
-      return std::string{"output.png"};
-    }
-  }();
-
-  const auto spp = args["--spp"].asLong();
-  const auto width = static_cast<size_t>(args["--width"].asLong());
-  const auto height = static_cast<size_t>(args["--height"].asLong());
+  const auto output_file = "cornell.png";
 
   fmt::print("width: {}, height: {}, sample size: {}\n", width, height, spp);
 
@@ -128,6 +136,7 @@ try {
   const auto scene = create_scene();
 
   const auto start = std::chrono::system_clock::now();
+
   path_tracer.run(scene, camera, image, static_cast<size_t>(spp));
   const auto end = std::chrono::system_clock::now();
 

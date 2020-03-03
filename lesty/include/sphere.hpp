@@ -18,8 +18,8 @@ struct Sphere : Hitable {
   beyond::Point3f center{};
   float radius = 1;
 
-  Sphere(beyond::Point3f center, float radius, const Material& mat)
-      : center{center}, radius{radius}, material{&mat}
+  Sphere(beyond::Point3f c, float r, const Material& mat)
+      : center{c}, radius{r}, material{&mat}
   {
   }
 

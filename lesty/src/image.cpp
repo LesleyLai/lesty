@@ -9,16 +9,20 @@
 
 #include <cmath>
 
-constexpr float to_gamma(float color)
+namespace {
+
+float to_gamma(float color)
 {
   return std::pow(color, 1 / 2.2f);
 }
 
 using byte = unsigned char;
-constexpr byte float_color_to_255(float color)
+byte float_color_to_255(float color)
 {
   return static_cast<byte>(255.99f * to_gamma(color));
 }
+
+} // namespace
 
 namespace lesty {
 
@@ -45,8 +49,9 @@ void Image::saveto(const std::string& filename) const
     buffer.push_back(green);
     buffer.push_back(blue);
   }
-  stbi_write_png(filename.c_str(), width_, height_, 3,
-                 reinterpret_cast<void*>(buffer.data()), width_ * 3);
+  stbi_write_png(
+      filename.c_str(), static_cast<int>(width_), static_cast<int>(height_), 3,
+      reinterpret_cast<void*>(buffer.data()), static_cast<int>(width_ * 3));
 }
 
 } // namespace lesty

@@ -1,10 +1,10 @@
 #ifndef LESTY_AXIS_ALIGNED_RECT_HPP
 #define LESTY_AXIS_ALIGNED_RECT_HPP
 
+#include <beyond/core/math/vector.hpp>
+
 #include "hitable.hpp"
 #include "material.hpp"
-
-#include <beyond/core/math/vector.hpp>
 
 namespace lesty {
 
@@ -23,13 +23,13 @@ struct Rect_XY : Hitable {
   {
   }
 
-  AABB bounding_box() const noexcept override
+  [[nodiscard]] AABB bounding_box() const override
   {
     return AABB{{min, z - 0.0001f}, {max, z + 0.0001f}};
   }
 
-  Maybe_hit_t intersect_at(const Ray& r, float t_min, float t_max) const
-      noexcept override;
+  [[nodiscard]] Maybe_hit_t intersect_at(const Ray& r, float t_min,
+                                         float t_max) const override;
 
   const Material* const material;
 };
@@ -48,13 +48,13 @@ struct Rect_XZ : Hitable {
   {
   }
 
-  AABB bounding_box() const noexcept override
+  [[nodiscard]] AABB bounding_box() const override
   {
     return AABB{{min.x, y - 0.0001f, min.y}, {max.x, y + 0.0001f, max.y}};
   }
 
-  Maybe_hit_t intersect_at(const Ray& r, float t_min, float t_max) const
-      noexcept override;
+  [[nodiscard]] Maybe_hit_t intersect_at(const Ray& r, float t_min,
+                                         float t_max) const override;
 };
 
 struct Rect_YZ : Hitable {
@@ -71,13 +71,13 @@ struct Rect_YZ : Hitable {
   {
   }
 
-  AABB bounding_box() const noexcept override
+  [[nodiscard]] AABB bounding_box() const override
   {
     return AABB{{x - 0.0001f, min.x, min.y}, {x + 0.0001f, max.x, max.y}};
   }
 
-  Maybe_hit_t intersect_at(const Ray& r, float t_min, float t_max) const
-      noexcept override;
+  [[nodiscard]] Maybe_hit_t intersect_at(const Ray& r, float t_min,
+                                         float t_max) const override;
 };
 
 } // namespace lesty

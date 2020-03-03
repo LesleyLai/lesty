@@ -65,10 +65,10 @@ public:
   [[nodiscard]] constexpr auto hit(const Ray& r, float t_min, float t_max) const
       -> bool
   {
-    constexpr int num_dim = 3;
+    constexpr std::size_t num_dim = 3;
     // Credit: Andrew Kensler at Pixar adapt this version of AABB hit method
     // Shirley, Peter. Ray Tracing: the Next Week
-    for (int a = 0; a < num_dim; ++a) {
+    for (std::size_t a = 0; a < num_dim; ++a) {
       const float invD = 1.f / r.direction[a];
       float t0 = (min_[a] - r.origin[a]) * invD;
       float t1 = (max_[a] - r.origin[a]) * invD;

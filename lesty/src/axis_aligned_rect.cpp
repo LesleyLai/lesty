@@ -1,15 +1,19 @@
 #include "axis_aligned_rect.hpp"
 
-namespace lesty {
+namespace {
 
-beyond::Vector3f flip_negative_normal(beyond::Vector3f normal,
-                                      Normal_Direction d)
+constexpr beyond::Vector3f flip_negative_normal(beyond::Vector3f normal,
+                                                lesty::Normal_Direction d)
 {
-  return d == Normal_Direction::Negetive ? -normal : normal;
+  return d == lesty::Normal_Direction::Negetive ? -normal : normal;
 }
 
-Maybe_hit_t Rect_XY::intersect_at(const Ray& r, float t_min, float t_max) const
-    noexcept
+} // anonymous namespace
+
+namespace lesty {
+
+[[nodiscard]] Maybe_hit_t Rect_XY::intersect_at(const Ray& r, float t_min,
+                                                float t_max) const
 {
   const float t = (z - r.origin.z) / r.direction.z;
   if (t < t_min || t > t_max) {
@@ -27,8 +31,8 @@ Maybe_hit_t Rect_XY::intersect_at(const Ray& r, float t_min, float t_max) const
                    material};
 }
 
-Maybe_hit_t Rect_XZ::intersect_at(const Ray& r, float t_min, float t_max) const
-    noexcept
+[[nodiscard]] Maybe_hit_t Rect_XZ::intersect_at(const Ray& r, float t_min,
+                                                float t_max) const
 {
   const float t = (y - r.origin.y) / r.direction.y;
   if (t < t_min || t > t_max) {
@@ -46,8 +50,8 @@ Maybe_hit_t Rect_XZ::intersect_at(const Ray& r, float t_min, float t_max) const
                    material};
 }
 
-Maybe_hit_t Rect_YZ::intersect_at(const Ray& r, float t_min, float t_max) const
-    noexcept
+[[nodiscard]] Maybe_hit_t Rect_YZ::intersect_at(const Ray& r, float t_min,
+                                                float t_max) const
 {
   const float t = (x - r.origin.x) / r.direction.x;
   if (t < t_min || t > t_max) {

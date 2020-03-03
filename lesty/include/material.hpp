@@ -65,9 +65,8 @@ private:
 
 class Dielectric : public Material {
 public:
-  Dielectric(Color albedo, float fuzzness, float refractive_index) noexcept
-      : Material{albedo}, fuzzness_{fuzzness}, refractive_index_{
-                                                   refractive_index}
+  Dielectric(Color albedo, float refractive_index) noexcept
+      : Material{albedo}, refractive_index_{refractive_index}
   {
   }
 
@@ -75,7 +74,6 @@ public:
                              const HitRecord& record) const override;
 
 private:
-  float fuzzness_;
   float refractive_index_;
 };
 

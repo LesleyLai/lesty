@@ -1,8 +1,6 @@
 #include "pathtracer.hpp"
 
 #include <future>
-#include <iostream>
-#include <memory>
 #include <random>
 
 #include "camera.hpp"
@@ -87,8 +85,10 @@ void Path_tracer::run(const Scene& scene, const Camera& camera, Image& image,
                     std::mt19937{std::random_device{}()};
                 std::uniform_real_distribution<float> dis(0.0, 1.0);
                 for (size_t sample = 0; sample < sample_per_pixel; ++sample) {
-                  const float u = (x + i + dis(gen)) / width;
-                  const float v = (y + j + dis(gen)) / height;
+                  const auto u = (static_cast<float>(x + i) + dis(gen)) /
+                                 static_cast<float>(width);
+                  const auto v = (static_cast<float>(y + j) + dis(gen)) /
+                                 static_cast<float>(height);
 
                   const auto r = camera.get_ray(Camera_sample{{u, v}});
                   c += trace(scene, r);
@@ -100,7 +100,8 @@ void Path_tracer::run(const Scene& scene, const Camera& camera, Image& image,
 
             ++progress_tick;
             progress_bar_.set_progress(
-                static_cast<float>(progress_tick.load()) / tile_count * 100.);
+                static_cast<size_t>(static_cast<double>(progress_tick.load()) /
+                                    static_cast<double>(tile_count) * 100.));
 
             return tile;
           }));

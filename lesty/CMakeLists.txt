@@ -26,7 +26,7 @@ target_link_libraries(lesty
         CONAN_PKG::stb
         indicators::indicators
         PRIVATE
-        #lesty::compiler_options
+        lesty::compiler_options
         )
 target_include_directories(lesty PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 add_clangformat(lesty)
