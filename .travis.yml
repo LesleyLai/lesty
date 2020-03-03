@@ -59,7 +59,7 @@ matrix:
         - BUILD_ONLY=1 CC="/usr/bin/gcc-9"
         - CXX="/usr/bin/g++-9"
         - GCOV="/usr/bin/gcov-9"
-        - CMAKE_OPTIONS=" -DCMAKE_BUILD_TYPE=Debug -DLESTY_BUILD_TESTS_COVERAGE=ON" CODECOV_TOKEN="bfb807d5-6b2e-4d8d-8dae-0dcabf3c5c68"
+        - CMAKE_OPTIONS=" -DCMAKE_BUILD_TYPE=Debug -DLESTY_BUILD_TESTS_COVERAGE=ON" CODECOV_TOKEN="4f245213-23b9-4729-8f77-ddf2fc35f0b9"
       addons:
         apt:
           sources:
