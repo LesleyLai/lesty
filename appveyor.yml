@@ -23,13 +23,14 @@ configuration:
 
 #Cmake will autodetect the compiler, but we set the arch
 before_build:
+  - git submodule update --init --recursive
   - set PATH=%PATH%;%PYTHON%/Scripts/
   - pip.exe install conan
   - cmake -H. -BBuild -A%PLATFORM%
 
 # build with MSBuild
 build:
-  project: Build\cpp_boilerplate.sln   # path to Visual Studio solution or project
+  project: Build\lesty.sln              # path to Visual Studio solution or project
   parallel: true                        # enable MSBuild parallel builds
   verbosity: normal                     # MSBuild verbosity level {quiet|minimal|normal|detailed}
 
