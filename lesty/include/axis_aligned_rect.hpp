@@ -23,7 +23,7 @@ struct Rect_XY : Hitable {
   {
   }
 
-  std::optional<AABB> bounding_box() const noexcept override
+  AABB bounding_box() const noexcept override
   {
     return AABB{{min, z - 0.0001f}, {max, z + 0.0001f}};
   }
@@ -48,7 +48,7 @@ struct Rect_XZ : Hitable {
   {
   }
 
-  std::optional<AABB> bounding_box() const noexcept override
+  AABB bounding_box() const noexcept override
   {
     return AABB{{min.x, y - 0.0001f, min.y}, {max.x, y + 0.0001f, max.y}};
   }
@@ -71,7 +71,7 @@ struct Rect_YZ : Hitable {
   {
   }
 
-  std::optional<AABB> bounding_box() const noexcept override
+  AABB bounding_box() const noexcept override
   {
     return AABB{{x - 0.0001f, min.x, min.y}, {x + 0.0001f, max.x, max.y}};
   }

@@ -8,17 +8,19 @@
 // A dummy object that you cannot hit
 namespace {
 struct Never_hitable : lesty::Hitable {
-  std::optional<lesty::AABB> bounding_box() const noexcept override
+  auto bounding_box() const -> lesty::AABB override
   {
     constexpr auto min = std::numeric_limits<float>::min();
     constexpr auto max = std::numeric_limits<float>::max();
 
     // Returns a bounding box that do not bound to anything
-    return lesty::AABB{{max, max, max}, {min, min, min}};
+    return lesty::AABB{
+        {max, max, max}, {min, min, min}, lesty::AABB::unchecked_tag};
   }
 
-  lesty::Maybe_hit_t intersect_at(const lesty::Ray& /*r*/, float /*t_min*/,
-                                  float /*t_max*/) const noexcept override
+  auto intersect_at(const lesty::Ray& /*r*/, float /*t_min*/,
+                    float /*t_max*/) const
+      -> std::optional<lesty::HitRecord> override
   {
     return {};
   }
@@ -27,8 +29,8 @@ struct Never_hitable : lesty::Hitable {
 
 namespace lesty {
 
-BVH_node::BVH_node(const Object_iterator& begin,
-                   const Object_iterator& end) noexcept
+BVH_node::BVH_node(const ObjectIterator& begin,
+                   const ObjectIterator& end) noexcept
 {
   thread_local std::mt19937 gen = std::mt19937{std::random_device{}()};
   std::uniform_int_distribution<int> dis(0, 2);
@@ -38,24 +40,24 @@ BVH_node::BVH_node(const Object_iterator& begin,
     std::sort(begin, end,
               [](const std::unique_ptr<Hitable>& lhs,
                  const std::unique_ptr<Hitable>& rhs) {
-                return lhs->bounding_box()->min().x <
-                       rhs->bounding_box()->min().x;
+                return lhs->bounding_box().min().x <
+                       rhs->bounding_box().min().x;
               });
   } else if (axis == 1) {
     // Sort by y
     std::sort(begin, end,
               [](const std::unique_ptr<Hitable>& lhs,
                  const std::unique_ptr<Hitable>& rhs) {
-                return lhs->bounding_box()->min().y <
-                       rhs->bounding_box()->min().y;
+                return lhs->bounding_box().min().y <
+                       rhs->bounding_box().min().y;
               });
   } else {
     // Sort by z
     std::sort(begin, end,
               [](const std::unique_ptr<Hitable>& lhs,
                  const std::unique_ptr<Hitable>& rhs) {
-                return lhs->bounding_box()->min().z <
-                       rhs->bounding_box()->min().z;
+                return lhs->bounding_box().min().z <
+                       rhs->bounding_box().min().z;
               });
   }
 
@@ -76,13 +78,11 @@ BVH_node::BVH_node(const Object_iterator& begin,
     right_ = std::make_unique<BVH_node>(begin + size / 2, end);
   }
 
-  assert(left_->bounding_box() != std::nullopt &&
-         right_->bounding_box() != std::nullopt);
-  box_ = surrounding_box(*left_->bounding_box(), *right_->bounding_box());
+  box_ = aabb_union(left_->bounding_box(), right_->bounding_box());
 }
 
-Maybe_hit_t BVH_node::intersect_at(const Ray& r, float t_min, float t_max) const
-    noexcept
+auto BVH_node::intersect_at(const Ray& r, float t_min, float t_max) const
+    noexcept -> std::optional<HitRecord>
 {
   assert(left_ != nullptr && right_ != nullptr);
 

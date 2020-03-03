@@ -22,9 +22,9 @@ Maybe_hit_t Rect_XY::intersect_at(const Ray& r, float t_min, float t_max) const
     return std::nullopt;
   }
 
-  return Hit_record{t, r.point_at_parameter(t),
-                    flip_negative_normal(beyond::Vector3f(0, 0, 1), direction),
-                    material};
+  return HitRecord{t, r.point_at_parameter(t),
+                   flip_negative_normal(beyond::Vector3f(0, 0, 1), direction),
+                   material};
 }
 
 Maybe_hit_t Rect_XZ::intersect_at(const Ray& r, float t_min, float t_max) const
@@ -41,9 +41,9 @@ Maybe_hit_t Rect_XZ::intersect_at(const Ray& r, float t_min, float t_max) const
     return std::nullopt;
   }
 
-  return Hit_record{t, r.point_at_parameter(t),
-                    flip_negative_normal(beyond::Vector3f(0, 1, 0), direction),
-                    material};
+  return HitRecord{t, r.point_at_parameter(t),
+                   flip_negative_normal(beyond::Vector3f(0, 1, 0), direction),
+                   material};
 }
 
 Maybe_hit_t Rect_YZ::intersect_at(const Ray& r, float t_min, float t_max) const
@@ -60,9 +60,9 @@ Maybe_hit_t Rect_YZ::intersect_at(const Ray& r, float t_min, float t_max) const
     return std::nullopt;
   }
 
-  return Hit_record{t, r.point_at_parameter(t),
-                    flip_negative_normal(beyond::Vector3f(1, 0, 0), direction),
-                    material};
+  return HitRecord{t, r.point_at_parameter(t),
+                   flip_negative_normal(beyond::Vector3f(1, 0, 0), direction),
+                   material};
 }
 
 } // namespace lesty

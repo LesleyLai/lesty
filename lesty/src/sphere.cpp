@@ -6,14 +6,14 @@
 
 namespace lesty {
 
-std::optional<AABB> Sphere::bounding_box() const noexcept
+auto Sphere::bounding_box() const -> AABB
 {
   const beyond::Vector3f offset(radius, radius, radius);
-  return AABB{center - offset, center + offset};
+  return AABB{center - offset, center + offset, AABB::unchecked_tag};
 }
 
-Maybe_hit_t Sphere::intersect_at(const Ray& r, float t_min, float t_max) const
-    noexcept
+auto Sphere::intersect_at(const Ray& r, float t_min, float t_max) const
+    -> std::optional<HitRecord>
 {
   const auto oc = r.origin - center;
 
@@ -34,8 +34,8 @@ Maybe_hit_t Sphere::intersect_at(const Ray& r, float t_min, float t_max) const
     const auto point = r.point_at_parameter(t);
     const auto normal = (point - center) / radius;
 
-    Hit_record record{t, point, normal, material};
-    return std::optional<Hit_record>{std::in_place, record};
+    HitRecord record{t, point, normal, material};
+    return std::optional<HitRecord>{std::in_place, record};
   };
 
   // Get the smaller non-negative value of t1, t2

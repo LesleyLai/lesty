@@ -9,19 +9,19 @@
 
 namespace lesty {
 
-using Object_iterator = std::vector<std::unique_ptr<Hitable>>::iterator;
+using ObjectIterator = std::vector<std::unique_ptr<Hitable>>::iterator;
 
 class BVH_node : public Hitable {
 public:
-  BVH_node(const Object_iterator& begin, const Object_iterator& end) noexcept;
+  BVH_node(const ObjectIterator& begin, const ObjectIterator& end) noexcept;
 
-  std::optional<AABB> bounding_box() const noexcept override
+  [[nodiscard]] auto bounding_box() const noexcept -> AABB override
   {
     return box_;
   }
 
-  Maybe_hit_t intersect_at(const Ray& r, float t_min, float t_max) const
-      noexcept override;
+  [[nodiscard]] auto intersect_at(const Ray& r, float t_min, float t_max) const
+      noexcept -> std::optional<HitRecord> override;
 
 private:
   std::unique_ptr<const Hitable> left_ = nullptr;

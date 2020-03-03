@@ -15,8 +15,7 @@ TEST_CASE("AABBs for sphere", "[geometry] [AABB]")
 {
   Sphere sphere{{0, 0, 2}, 1, dummy_mat};
   const auto box = sphere.bounding_box();
-  REQUIRE(box != std::nullopt);
-  REQUIRE(*box == AABB({-1, -1, 1}, {1, 1, 3}));
+  REQUIRE(box == AABB({-1, -1, 1}, {1, 1, 3}));
 }
 
 TEST_CASE("Ray-Sphere intersection", "[geometry]")

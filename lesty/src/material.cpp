@@ -53,14 +53,14 @@ float schlick(float cosine, float ref_idx)
 namespace lesty {
 
 std::optional<Ray> Lambertian::scatter(const Ray& /*ray_in*/,
-                                       const Hit_record& record) const
+                                       const HitRecord& record) const
 {
   const auto target = record.point + record.normal + random_in_unit_sphere();
   return Ray{record.point, target - record.point};
 }
 
 std::optional<Ray> Metal::scatter(const Ray& ray_in,
-                                  const Hit_record& record) const
+                                  const HitRecord& record) const
 {
   auto incident_dir = ray_in.direction / ray_in.direction.length();
   auto reflected = reflect(incident_dir, record.normal) +
@@ -74,7 +74,7 @@ std::optional<Ray> Metal::scatter(const Ray& ray_in,
 }
 
 std::optional<Ray> Dielectric::scatter(const Ray& ray_in,
-                                       const Hit_record& record) const
+                                       const HitRecord& record) const
 {
   beyond::Vector3f out_normal;
   float ni_over_nt;
@@ -109,7 +109,7 @@ std::optional<Ray> Dielectric::scatter(const Ray& ray_in,
 }
 
 std::optional<Ray> Emission::scatter(const Ray& /*ray_in*/,
-                                     const Hit_record& /*record*/) const
+                                     const HitRecord& /*record*/) const
 {
   return {};
 }

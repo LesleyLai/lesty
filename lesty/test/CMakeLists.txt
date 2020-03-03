@@ -10,7 +10,7 @@ add_executable(${TEST_TARGET_NAME}
         sphere_test.cpp
         scene_test.cpp
         tile_test.cpp
-        main.cpp)
+        main.cpp triangle_test.cpp)
 
 target_link_libraries(${TEST_TARGET_NAME} PRIVATE lesty::lesty #lesty::compiler_options
         CONAN_PKG::Catch2)

@@ -25,7 +25,7 @@ public:
    * @return scattered ray if the incident ray is not absorbed
    */
   virtual std::optional<Ray> scatter(const Ray& ray_in,
-                                     const Hit_record& record) const = 0;
+                                     const HitRecord& record) const = 0;
 
   virtual Color emitted() const
   {
@@ -46,7 +46,7 @@ public:
   explicit Lambertian(Color albedo) noexcept : Material{albedo} {}
 
   std::optional<Ray> scatter(const Ray& ray_in,
-                             const Hit_record& record) const override;
+                             const HitRecord& record) const override;
 };
 
 class Metal : public Material {
@@ -57,7 +57,7 @@ public:
   }
 
   std::optional<Ray> scatter(const Ray& ray_in,
-                             const Hit_record& record) const override;
+                             const HitRecord& record) const override;
 
 private:
   float fuzzness_;
@@ -72,7 +72,7 @@ public:
   }
 
   std::optional<Ray> scatter(const Ray& ray_in,
-                             const Hit_record& record) const override;
+                             const HitRecord& record) const override;
 
 private:
   float fuzzness_;
@@ -84,7 +84,7 @@ public:
   explicit Emission(Color emit) noexcept : emit_(emit) {}
 
   std::optional<Ray> scatter(const Ray& ray_in,
-                             const Hit_record& record) const override;
+                             const HitRecord& record) const override;
   Color emitted() const override;
 
 private:

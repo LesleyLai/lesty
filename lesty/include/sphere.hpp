@@ -23,14 +23,14 @@ struct Sphere : Hitable {
   {
   }
 
-  std::optional<AABB> bounding_box() const noexcept override;
+  [[nodiscard]] auto bounding_box() const -> AABB override;
 
   /**
    * @brief Ray-sphere intersection detection
    * @see Hitable::intersect_at
    */
-  Maybe_hit_t intersect_at(const Ray& r, float t_min, float t_max) const
-      noexcept override;
+  [[nodiscard]] auto intersect_at(const Ray& r, float t_min, float t_max) const
+      -> std::optional<HitRecord> override;
 
   const Material* const material;
 };

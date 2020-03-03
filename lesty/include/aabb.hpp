@@ -2,9 +2,11 @@
 #define LESTY_AABB_HPP
 
 #include <algorithm>
-#include <ostream>
+#include <iosfwd>
 
 #include <beyond/core/math/vector.hpp>
+
+#include <beyond/core/math/serial.hpp>
 
 #include "ray.hpp"
 
@@ -16,21 +18,43 @@ namespace lesty {
  */
 class AABB {
 public:
+  struct UncheckedTag {
+  };
+  static constexpr UncheckedTag unchecked_tag{};
+
   constexpr AABB() noexcept = default;
 
   /**
-   * @brief Construction an AABB from its minimal corner to maximum corner
+   * @brief initialize an AABB to enclose a single point:
    */
-  constexpr AABB(beyond::Point3f min, beyond::Point3f max) noexcept
+  explicit constexpr AABB(beyond::Point3f p) noexcept : min_{p}, max_{p} {}
+
+  /**
+   * @brief Construction an AABB from two points
+   */
+  constexpr AABB(beyond::Point3f p1, beyond::Point3f p2) noexcept
+      : min_{std::min(p1.x, p2.x), std::min(p1.y, p2.y), std::min(p1.z, p2.z)},
+        max_{std::max(p1.x, p2.x), std::max(p1.y, p2.y), std::max(p1.z, p2.z)}
+  {
+  }
+
+  /**
+   * @brief Construction an AABB from its minimal corner to maximum corner
+   * @warning This function does not check whether the two points are actually
+   * minimal or maximum corner
+   */
+  constexpr AABB(beyond::Point3f min, beyond::Point3f max,
+                 UncheckedTag) noexcept
       : min_{min}, max_{max}
   {
   }
 
-  constexpr beyond::Point3f min() const
+  [[nodiscard]] constexpr beyond::Point3f min() const
   {
     return min_;
   }
-  constexpr beyond::Point3f max() const
+
+  [[nodiscard]] constexpr beyond::Point3f max() const
   {
     return max_;
   }
@@ -38,7 +62,8 @@ public:
   /**
    * @brief Whether the ray r hit AABB or not
    */
-  constexpr bool hit(const Ray& r, float t_min, float t_max) const
+  [[nodiscard]] constexpr auto hit(const Ray& r, float t_min, float t_max) const
+      -> bool
   {
     constexpr int num_dim = 3;
     // Credit: Andrew Kensler at Pixar adapt this version of AABB hit method
@@ -58,33 +83,38 @@ public:
     return true;
   }
 
+  [[nodiscard]] friend constexpr auto operator==(const AABB& lhs,
+                                                 const AABB& rhs) -> bool
+  {
+    return lhs.min() == rhs.min() && lhs.max() == rhs.max();
+  }
+
+  [[nodiscard]] friend constexpr auto operator!=(const AABB& lhs,
+                                                 const AABB& rhs) -> bool
+  {
+    return !(lhs == rhs);
+  }
+
+  /**
+   * @brief Computes the bounding box for two AABBs
+   */
+  friend constexpr auto aabb_union(const AABB& box0, const AABB& box1) -> AABB
+  {
+    return AABB{{std::min(box0.min().x, box1.min().x),
+                 std::min(box0.min().y, box1.min().y),
+                 std::min(box0.min().z, box1.min().z)},
+                {std::max(box0.max().x, box1.max().x),
+                 std::max(box0.max().y, box1.max().y),
+                 std::max(box0.max().z, box1.max().z)}};
+  }
+
 private:
   beyond::Point3f min_ = {};
   beyond::Point3f max_ = {};
 };
 
-constexpr bool operator==(const AABB& lhs, const AABB& rhs)
-{
-  return lhs.min() == rhs.min() && lhs.max() == rhs.max();
-}
-
-constexpr bool operator!=(const AABB& lhs, const AABB& rhs)
-{
-  return !(lhs == rhs);
-}
-
-/**
- * @brief Computes the bounding box for two AABBs
- */
-constexpr AABB surrounding_box(const AABB box0, const AABB box1)
-{
-  return AABB{{std::min(box0.min().x, box1.min().x),
-               std::min(box0.min().y, box1.min().y),
-               std::min(box0.min().z, box1.min().z)},
-              {std::max(box0.max().x, box1.max().x),
-               std::max(box0.max().y, box1.max().y),
-               std::max(box0.max().z, box1.max().z)}};
-}
+[[nodiscard]] auto to_string(const AABB& box) -> std::string;
+auto operator<<(std::ostream& os, const AABB& box) -> std::ostream&;
 
 } // namespace lesty
 
