@@ -1,5 +1,3 @@
-#include "dummy.hpp"
-
 #include <algorithm>
 
 auto fib(int x) noexcept -> int

@@ -7,6 +7,7 @@ set(compiler_included true)
 
 # Link this 'library' to use the standard warnings
 add_library(compiler_options INTERFACE)
+add_library(lesty::compiler_options ALIAS compiler_options)
 
 
 option(LESTY_WARNING_AS_ERROR "Treats compiler warnings as errors" ON)

@@ -13,12 +13,11 @@ include("cmake/conan.cmake")
 run_conan()
 
 add_subdirectory(third-party)
-add_subdirectory(src)
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)
 endif ()
 
-if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
-    add_subdirectory(test)
-endif ()
+
+add_subdirectory(lesty)
+add_subdirectory(lesty-cli)

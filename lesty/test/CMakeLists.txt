@@ -4,14 +4,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_executable(${TEST_TARGET_NAME} "main.cpp")
 
-target_link_libraries(${TEST_TARGET_NAME} PRIVATE common compiler_options
+target_link_libraries(${TEST_TARGET_NAME} PRIVATE lesty::lesty lesty::compiler_options
         CONAN_PKG::Catch2)
 
 CMAKE_DEPENDENT_OPTION(LESTY_BUILD_TESTS_COVERAGE
         "Build the project with code coverage support for tests" OFF
         "BUILD_TESTING" OFF)
 if (${LESTY_BUILD_TESTS_COVERAGE})
-    include("../cmake/CodeCoverage.cmake")
+    include("../../cmake/CodeCoverage.cmake")
     APPEND_COVERAGE_COMPILER_FLAGS("-g -O0 -fprofile-arcs -ftest-coverage")
     set(COVERAGE_LCOV_EXCLUDES '/usr/*' '*/.conan/*' '*/test/*' 'test/*')
     SETUP_TARGET_FOR_COVERAGE_LCOV(
@@ -21,6 +21,5 @@ if (${LESTY_BUILD_TESTS_COVERAGE})
     )
 endif ()
 
-enable_testing()
 
 add_test(NAME ${TEST_TARGET_NAME} COMMAND "${CMAKE_BINARY_DIR}/bin/${TEST_TARGET_NAME}")
