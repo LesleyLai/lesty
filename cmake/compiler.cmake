@@ -28,7 +28,6 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             -Wunused
             -Woverloaded-virtual
             -Wpedantic
-            -Wconversion
             -Wsign-conversion
             -Wnull-dereference
             -Wdouble-promotion
