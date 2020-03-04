@@ -3,9 +3,9 @@
 namespace {
 
 constexpr beyond::Vector3f flip_negative_normal(beyond::Vector3f normal,
-                                                lesty::Normal_Direction d)
+                                                lesty::NormalDirection d)
 {
-  return d == lesty::Normal_Direction::Negetive ? -normal : normal;
+  return d == lesty::NormalDirection::Negetive ? -normal : normal;
 }
 
 } // anonymous namespace

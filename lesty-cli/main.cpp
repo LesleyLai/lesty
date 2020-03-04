@@ -1,11 +1,25 @@
 #include <chrono>
 #include <cstdio>
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <vector>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4702)
+#endif
+
 #include <cxxopts.hpp>
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 #include <fmt/format.h>
+#include <fmt/ostream.h>
+
+#include "nlohmann/json.hpp"
 
 #include "axis_aligned_rect.hpp"
 #include "bounding_volume_hierarchy.hpp"
@@ -16,49 +30,6 @@
 #include "sphere.hpp"
 
 using namespace lesty;
-
-namespace {
-const Lambertian red{Color(0.65f, 0.05f, 0.05f)};
-const Lambertian white{Color(0.73f, 0.73f, 0.73f)};
-const Lambertian green{Color(0.12f, 0.45f, 0.15f)};
-const Emission light{Color(1, 1, 1)};
-const Metal metal{Color(0.73f, 0.73f, 0.73f), 0.8f};
-const Dielectric glass(Color(1.f, 1.f, 1.f), 1.655f);
-} // namespace
-
-Scene create_scene()
-{
-  std::vector<std::unique_ptr<Hitable>> objects;
-  std::vector<std::unique_ptr<Material>> materials;
-
-  objects.push_back(std::make_unique<Rect_YZ>(
-      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 555.f, green,
-      Normal_Direction::Negetive));
-  objects.push_back(std::make_unique<Rect_YZ>(
-      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 0.f, red));
-
-  objects.push_back(std::make_unique<Rect_XZ>(beyond::Point2f(213.f, 227.f),
-                                              beyond::Point2f(343.f, 332.f),
-                                              554.f, light));
-  objects.push_back(std::make_unique<Rect_XZ>(
-      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 555.f, white,
-      Normal_Direction::Negetive));
-  objects.push_back(std::make_unique<Rect_XZ>(
-      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 0.f, white));
-
-  objects.push_back(std::make_unique<Rect_XY>(
-      beyond::Point2f(0.f, 0.f), beyond::Point2f(555.f, 555.f), 555.f, white,
-      Normal_Direction::Negetive));
-
-  objects.push_back(std::make_unique<Sphere>(
-      beyond::Point3f{200.f, 100.f, 300.f}, 100.f, metal));
-
-  objects.push_back(std::make_unique<Sphere>(
-      beyond::Point3f{300.f, 110.f, 100.f}, 100.f, glass));
-
-  return Scene(std::make_unique<BVH_node>(objects.begin(), objects.end()),
-               std::move(materials));
-}
 
 template <typename Duration>
 [[nodiscard]] auto get_elapse_time(const Duration& elapsed_time) -> std::string
@@ -76,8 +47,7 @@ template <typename Duration>
   }
 }
 
-int main(int argc, char** argv)
-try {
+int main(int argc, char** argv) try {
   using namespace std::chrono;
   using namespace beyond::literals;
 
@@ -126,13 +96,13 @@ try {
 
   const auto input = [&]() {
     if (result.count("input")) {
-      return result["input"];
+      return result["input"].as<std::string>();
     } else {
       std::fputs("Error: Need an input file\n\n", stderr);
       std::exit(-1);
     }
   }();
-  fmt::print("input file: {}\n", result["input"].as<std::string>());
+  fmt::print("input file: {}\n", input);
 
   const auto spp = result["spp"].as<size_t>();
   const auto width = result["width"].as<size_t>();
@@ -140,6 +110,115 @@ try {
   const auto output_file = result["output"].as<std::string>();
 
   fmt::print("width: {}, height: {}, sample size: {}\n", width, height, spp);
+
+  std::ifstream input_file{input};
+  if (!input_file.is_open()) {
+    fmt::print(stderr, "Error: cannot open file \"{}\"\n", input);
+    std::exit(2);
+  }
+
+  nlohmann::json json;
+  input_file >> json;
+
+  if (!json["title"].is_string()) {
+    std::puts("Missing title in input file");
+    std::exit(3);
+  }
+
+  if (!json["objects"].is_array()) {
+    std::puts("Missing the objects in the input file");
+    std::exit(3);
+  }
+
+  if (!json["materials"].is_array()) {
+    std::puts("Missing the materials in the input file");
+    std::exit(3);
+  }
+
+  const auto title = json["title"].get<std::string>();
+  fmt::print("Title: {}\n", title);
+
+  auto parse_color = [](nlohmann::json color_json) {
+    return lesty::Color{color_json.at(0).get<float>(),
+                        color_json.at(1).get<float>(),
+                        color_json.at(2).get<float>()};
+  };
+
+  std::vector<std::unique_ptr<Material>> materials;
+  for (const auto& mat_json : json["materials"]) {
+    const auto type = mat_json["type"].get<std::string>();
+    if (type == "Lambertian") {
+      const auto albedo = parse_color(mat_json["albedo"]);
+      materials.emplace_back(std::make_unique<Lambertian>(albedo));
+    } else if (type == "Emission") {
+      const auto albedo = parse_color(mat_json["emit"]);
+      materials.emplace_back(std::make_unique<Emission>(albedo));
+    } else if (type == "Metal") {
+      const auto albedo = parse_color(mat_json["albedo"]);
+      materials.emplace_back(
+          std::make_unique<Metal>(albedo, mat_json["fuzzness"].get<float>()));
+    } else if (type == "Dialectic") {
+      const auto albedo = parse_color(mat_json["albedo"]);
+      materials.emplace_back(std::make_unique<Dielectric>(
+          albedo, mat_json["refractive_index"].get<float>()));
+    } else {
+      throw std::runtime_error(fmt::format("Invalid material type {}\n", type));
+    }
+  }
+
+  auto parse_point2f = [](nlohmann::json pt_json) {
+    return beyond::Point2f{pt_json.at(0).get<float>(),
+                           pt_json.at(1).get<float>()};
+  };
+
+  auto parse_point3f = [](nlohmann::json pt_json) {
+    return beyond::Point3f{pt_json.at(0).get<float>(),
+                           pt_json.at(1).get<float>(),
+                           pt_json.at(2).get<float>()};
+  };
+
+  const auto materials_count = materials.size();
+  std::vector<std::unique_ptr<Hitable>> objects;
+  for (const auto& obj_json : json["objects"]) {
+    const auto type = obj_json["type"].get<std::string>();
+
+    const auto material_id = obj_json["material"].get<std::size_t>();
+    if (material_id >= materials_count) {
+      throw std::runtime_error(
+          fmt::format("Invalid material index {}, totally {} materials\n",
+                      material_id, materials_count));
+    }
+    const auto& material = *materials[material_id];
+
+    if (type.starts_with("Rect")) {
+      auto min = parse_point2f(obj_json["min"]);
+      auto max = parse_point2f(obj_json["max"]);
+
+      auto normal_direction = (obj_json["normal_direction"] > 0)
+                                  ? NormalDirection::Positive
+                                  : NormalDirection::Negetive;
+
+      if (type == "RectYZ") {
+        objects.emplace_back(std::make_unique<Rect_YZ>(
+            min, max, obj_json["x"].get<float>(), material, normal_direction));
+      } else if (type == "RectXZ") {
+        objects.emplace_back(std::make_unique<Rect_XZ>(
+            min, max, obj_json["y"].get<float>(), material, normal_direction));
+      } else if (type == "RectXY") {
+        objects.emplace_back(std::make_unique<Rect_XY>(
+            min, max, obj_json["z"].get<float>(), material, normal_direction));
+      } else {
+        throw std::runtime_error(fmt::format("Invalid object type {}\n", type));
+      }
+    } else if (type == "Sphere") {
+      auto center = parse_point3f(obj_json["center"]);
+
+      objects.emplace_back(std::make_unique<Sphere>(
+          center, obj_json["radius"].get<float>(), material));
+    } else {
+      throw std::runtime_error(fmt::format("Invalid object type {}\n", type));
+    }
+  }
 
   Path_tracer path_tracer;
 
@@ -149,7 +228,9 @@ try {
       static_cast<float>(width) / static_cast<float>(height);
   Camera camera{
       {278, 278, -800}, {278, 278, 0}, {0, 1, 0}, 40.0_deg, aspect_ratio};
-  const auto scene = create_scene();
+  const auto scene =
+      Scene(std::make_unique<BVH_node>(objects.begin(), objects.end()),
+            std::move(materials));
 
   const auto start = std::chrono::system_clock::now();
 
