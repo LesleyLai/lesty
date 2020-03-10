@@ -31,7 +31,8 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
             -Wsign-conversion
             -Wnull-dereference
             -Wdouble-promotion
-            -Wformat=2)
+            -Wformat=2
+            )
     if (LESTY_WARNING_AS_ERROR)
         target_compile_options(compiler_options INTERFACE -Werror)
     endif ()
