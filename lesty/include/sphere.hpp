@@ -27,9 +27,10 @@ struct Sphere : Hitable {
 
   /**
    * @brief Ray-sphere intersection detection
-   * @see Hitable::intersect_at
+   * @see Hitable::intersection_with
    */
-  [[nodiscard]] auto intersect_at(const Ray& r, float t_min, float t_max) const
+  [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
+                                       float t_max) const
       -> std::optional<HitRecord> override;
 
   const Material* const material;

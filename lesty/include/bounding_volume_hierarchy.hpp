@@ -20,8 +20,9 @@ public:
     return box_;
   }
 
-  [[nodiscard]] auto intersect_at(const Ray& r, float t_min, float t_max) const
-      noexcept -> std::optional<HitRecord> override;
+  [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
+                                       float t_max) const noexcept
+      -> std::optional<HitRecord> override;
 
 private:
   std::unique_ptr<const Hitable> left_ = nullptr;

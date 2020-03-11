@@ -12,7 +12,7 @@ auto Sphere::bounding_box() const -> AABB
   return AABB{center - offset, center + offset, AABB::unchecked_tag};
 }
 
-auto Sphere::intersect_at(const Ray& r, float t_min, float t_max) const
+auto Sphere::intersection_with(const Ray& r, float t_min, float t_max) const
     -> std::optional<HitRecord>
 {
   const auto oc = r.origin - center;

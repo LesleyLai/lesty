@@ -2,8 +2,8 @@
 
 namespace lesty {
 
-[[nodiscard]] auto Triangle::intersect_at(const Ray& r, float t_min,
-                                          float t_max) const
+[[nodiscard]] auto Triangle::intersection_with(const Ray& r, float t_min,
+                                               float t_max) const
     -> std::optional<HitRecord>
 {
 

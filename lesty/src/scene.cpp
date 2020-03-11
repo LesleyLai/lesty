@@ -13,8 +13,8 @@ namespace lesty {
 Maybe_hit_t Scene::intersect_at(const Ray& r) const noexcept
 {
   assert(aggregate_ != nullptr);
-  return aggregate_->intersect_at(r, 0.001f,
-                                  std::numeric_limits<float>::infinity());
+  return aggregate_->intersection_with(r, 0.001f,
+                                       std::numeric_limits<float>::infinity());
 }
 
 } // namespace lesty

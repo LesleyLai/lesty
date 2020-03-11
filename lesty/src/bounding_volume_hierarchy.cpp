@@ -18,8 +18,8 @@ struct Never_hitable : lesty::Hitable {
         {max, max, max}, {min, min, min}, lesty::AABB::unchecked_tag};
   }
 
-  auto intersect_at(const lesty::Ray& /*r*/, float /*t_min*/,
-                    float /*t_max*/) const
+  auto intersection_with(const lesty::Ray& /*r*/, float /*t_min*/,
+                         float /*t_max*/) const
       -> std::optional<lesty::HitRecord> override
   {
     return {};
@@ -81,7 +81,7 @@ BVH_node::BVH_node(const ObjectIterator& begin,
   box_ = aabb_union(left_->bounding_box(), right_->bounding_box());
 }
 
-auto BVH_node::intersect_at(const Ray& r, float t_min, float t_max) const
+auto BVH_node::intersection_with(const Ray& r, float t_min, float t_max) const
     noexcept -> std::optional<HitRecord>
 {
   assert(left_ != nullptr && right_ != nullptr);
@@ -90,8 +90,8 @@ auto BVH_node::intersect_at(const Ray& r, float t_min, float t_max) const
     return {};
   }
 
-  const auto hit_left_record = left_->intersect_at(r, t_min, t_max);
-  const auto hit_right_record = right_->intersect_at(r, t_min, t_max);
+  const auto hit_left_record = left_->intersection_with(r, t_min, t_max);
+  const auto hit_right_record = right_->intersection_with(r, t_min, t_max);
   if (hit_left_record && hit_right_record) {
     if (hit_left_record->t < hit_right_record->t) {
       return hit_left_record;

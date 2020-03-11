@@ -39,8 +39,8 @@ struct Hitable {
    * @brief Ray-object intersection detection
    * @return A optional record of intersection information, nothing if not hit
    */
-  [[nodiscard]] virtual auto intersect_at(const Ray& r, float t_min,
-                                          float t_max) const
+  [[nodiscard]] virtual auto intersection_with(const Ray& r, float t_min,
+                                               float t_max) const
       -> std::optional<HitRecord> = 0;
 };
 

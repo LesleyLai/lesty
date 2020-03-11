@@ -24,7 +24,7 @@ TEST_CASE("Ray-Triangle intersection", "[geometry] [triangle]")
 
       THEN("Intersect at (0, 0, 0)")
       {
-        const auto hit_record = tri.intersect_at(r, 0, inf);
+        const auto hit_record = tri.intersection_with(r, 0, inf);
         REQUIRE(hit_record);
         REQUIRE(hit_record->t == Approx(2));
         REQUIRE(hit_record->point == beyond::Point3(0, 0, 0));
@@ -37,7 +37,7 @@ TEST_CASE("Ray-Triangle intersection", "[geometry] [triangle]")
       const lesty::Ray r({-1, 1, -2}, {0, 0, 1});
       THEN("The triangle tri and ray r do not intersect")
       {
-        const auto hit_record = tri.intersect_at(r, 0, inf);
+        const auto hit_record = tri.intersection_with(r, 0, inf);
         REQUIRE(!hit_record);
       }
     }
@@ -47,7 +47,7 @@ TEST_CASE("Ray-Triangle intersection", "[geometry] [triangle]")
       const lesty::Ray r({1, 1, -2}, {0, 0, 1});
       THEN("The triangle tri and ray r do not intersect")
       {
-        const auto hit_record = tri.intersect_at(r, 0, inf);
+        const auto hit_record = tri.intersection_with(r, 0, inf);
         REQUIRE(!hit_record);
       }
     }
@@ -57,7 +57,7 @@ TEST_CASE("Ray-Triangle intersection", "[geometry] [triangle]")
       const lesty::Ray r({0, -1, -2}, {0, 0, 1});
       THEN("The triangle tri and ray r do not intersect")
       {
-        const auto hit_record = tri.intersect_at(r, 0, inf);
+        const auto hit_record = tri.intersection_with(r, 0, inf);
         REQUIRE(!hit_record);
       }
     }

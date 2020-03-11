@@ -12,8 +12,8 @@ constexpr beyond::Vec3 flip_negative_normal(beyond::Vec3 normal,
 
 namespace lesty {
 
-[[nodiscard]] Maybe_hit_t Rect_XY::intersect_at(const Ray& r, float t_min,
-                                                float t_max) const
+[[nodiscard]] Maybe_hit_t Rect_XY::intersection_with(const Ray& r, float t_min,
+                                                     float t_max) const
 {
   const float t = (z - r.origin.z) / r.direction.z;
   if (t < t_min || t > t_max) {
@@ -31,8 +31,8 @@ namespace lesty {
                    material};
 }
 
-[[nodiscard]] Maybe_hit_t Rect_XZ::intersect_at(const Ray& r, float t_min,
-                                                float t_max) const
+[[nodiscard]] Maybe_hit_t Rect_XZ::intersection_with(const Ray& r, float t_min,
+                                                     float t_max) const
 {
   const float t = (y - r.origin.y) / r.direction.y;
   if (t < t_min || t > t_max) {
@@ -50,8 +50,8 @@ namespace lesty {
                    material};
 }
 
-[[nodiscard]] Maybe_hit_t Rect_YZ::intersect_at(const Ray& r, float t_min,
-                                                float t_max) const
+[[nodiscard]] Maybe_hit_t Rect_YZ::intersection_with(const Ray& r, float t_min,
+                                                     float t_max) const
 {
   const float t = (x - r.origin.x) / r.direction.x;
   if (t < t_min || t > t_max) {

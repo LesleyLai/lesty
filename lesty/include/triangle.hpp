@@ -24,7 +24,8 @@ struct Triangle : Hitable {
 
   [[nodiscard]] constexpr auto bounding_box() const -> AABB override;
 
-  [[nodiscard]] auto intersect_at(const Ray& r, float t_min, float t_max) const
+  [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
+                                       float t_max) const
       -> std::optional<HitRecord> override;
 
   // Calculate the normal of a triangle
