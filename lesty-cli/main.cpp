@@ -47,8 +47,7 @@ template <typename Duration>
   }
 }
 
-int main(int argc, char** argv)
-try {
+int main(int argc, char** argv) try {
   using namespace std::chrono;
   using namespace beyond::literals;
 

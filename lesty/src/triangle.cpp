@@ -54,4 +54,9 @@ namespace lesty {
   return HitRecord{t, r(t), n, material};
 }
 
+[[nodiscard]] auto Triangle::bounding_box() const -> AABB
+{
+  return aabb_union(AABB(vertices[0], vertices[1]), AABB(vertices[2]));
+}
+
 } // namespace lesty

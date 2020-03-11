@@ -22,7 +22,7 @@ struct Triangle : Hitable {
   {
   }
 
-  [[nodiscard]] constexpr auto bounding_box() const -> AABB override;
+  [[nodiscard]] auto bounding_box() const -> AABB override;
 
   [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
                                        float t_max) const
@@ -31,11 +31,6 @@ struct Triangle : Hitable {
   // Calculate the normal of a triangle
   [[nodiscard]] constexpr auto normal() const -> beyond::Vec3;
 };
-
-[[nodiscard]] constexpr auto Triangle::bounding_box() const -> AABB
-{
-  return aabb_union(AABB(vertices[0], vertices[1]), AABB(vertices[2]));
-}
 
 [[nodiscard]] constexpr auto Triangle::normal() const -> beyond::Vec3
 {
