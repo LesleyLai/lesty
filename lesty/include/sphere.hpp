@@ -15,10 +15,10 @@
 namespace lesty {
 
 struct Sphere : Hitable {
-  beyond::Point3f center{};
+  beyond::Point3 center{};
   float radius = 1;
 
-  Sphere(beyond::Point3f c, float r, const Material& mat)
+  Sphere(beyond::Point3 c, float r, const Material& mat)
       : center{c}, radius{r}, material{&mat}
   {
   }

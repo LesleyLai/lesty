@@ -6,13 +6,13 @@ using lesty::Ray;
 
 TEST_CASE("Ray", "[geometry]")
 {
-  const beyond::Point3f origin = {1, 1, 1};
-  const beyond::Vector3f direction = {0, 0, 1};
+  const beyond::Point3 origin = {1, 1, 1};
+  const beyond::Vec3 direction = {0, 0, 1};
 
   SECTION("Default construct a ray at origin")
   {
     Ray default_ray;
-    REQUIRE(default_ray.origin == beyond::Point3f{0, 0, 0});
+    REQUIRE(default_ray.origin == beyond::Point3{0, 0, 0});
   }
 
   SECTION("Construct a ray with input")

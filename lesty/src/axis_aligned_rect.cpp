@@ -2,8 +2,8 @@
 
 namespace {
 
-constexpr beyond::Vector3f flip_negative_normal(beyond::Vector3f normal,
-                                                lesty::NormalDirection d)
+constexpr beyond::Vec3 flip_negative_normal(beyond::Vec3 normal,
+                                            lesty::NormalDirection d)
 {
   return d == lesty::NormalDirection::Negetive ? -normal : normal;
 }
@@ -27,7 +27,7 @@ namespace lesty {
   }
 
   return HitRecord{t, r.point_at_parameter(t),
-                   flip_negative_normal(beyond::Vector3f(0, 0, 1), direction),
+                   flip_negative_normal(beyond::Vec3(0, 0, 1), direction),
                    material};
 }
 
@@ -46,7 +46,7 @@ namespace lesty {
   }
 
   return HitRecord{t, r.point_at_parameter(t),
-                   flip_negative_normal(beyond::Vector3f(0, 1, 0), direction),
+                   flip_negative_normal(beyond::Vec3(0, 1, 0), direction),
                    material};
 }
 
@@ -65,7 +65,7 @@ namespace lesty {
   }
 
   return HitRecord{t, r.point_at_parameter(t),
-                   flip_negative_normal(beyond::Vector3f(1, 0, 0), direction),
+                   flip_negative_normal(beyond::Vec3(1, 0, 0), direction),
                    material};
 }
 

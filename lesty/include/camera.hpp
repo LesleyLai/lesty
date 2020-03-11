@@ -12,7 +12,7 @@ namespace lesty {
  * generate a ray
  */
 struct Camera_sample {
-  beyond::Point2f film_pos;
+  beyond::Point2 film_pos;
 };
 
 class Camera {
@@ -25,7 +25,7 @@ public:
    * @param fov Field of view of the camera
    * @param aspect Aspect ratio of the screen
    */
-  Camera(beyond::Point3f position, beyond::Point3f lookat, beyond::Vector3f up,
+  Camera(beyond::Point3 position, beyond::Point3 lookat, beyond::Vec3 up,
          beyond::Radianf fov, float aspect) noexcept
   {
     const float half_height = std::tan(fov.value() / 2);
@@ -53,10 +53,10 @@ public:
   }
 
 private:
-  beyond::Point3f origin_{};
-  beyond::Point3f lower_left_corner_{};
-  beyond::Vector3f horizontal_{};
-  beyond::Vector3f vertical_{};
+  beyond::Point3 origin_{};
+  beyond::Point3 lower_left_corner_{};
+  beyond::Vec3 horizontal_{};
+  beyond::Vec3 vertical_{};
 };
 
 } // namespace lesty

@@ -17,8 +17,8 @@ class Material;
  */
 struct HitRecord {
   float t{};
-  beyond::Point3f point{}; ///< Intersection point
-  beyond::Vector3f
+  beyond::Point3 point{}; ///< Intersection point
+  beyond::Vec3
       normal{}; ///< Surface normal, need to be construct as a unit vector
   const Material* const material{};
 };

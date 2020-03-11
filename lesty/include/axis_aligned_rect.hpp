@@ -11,12 +11,12 @@ namespace lesty {
 enum class NormalDirection { Positive, Negetive };
 
 struct Rect_XY : Hitable {
-  beyond::Point2f min;
-  beyond::Point2f max;
+  beyond::Point2 min;
+  beyond::Point2 max;
   float z;
   NormalDirection direction;
 
-  Rect_XY(beyond::Point2f in_min, beyond::Point2f in_max, float in_z,
+  Rect_XY(beyond::Point2 in_min, beyond::Point2 in_max, float in_z,
           const Material& mat, NormalDirection dir = NormalDirection::Positive)
       : min{in_min}, max{in_max}, z{in_z}, direction{dir}, material{&mat}
   {
@@ -34,13 +34,13 @@ struct Rect_XY : Hitable {
 };
 
 struct Rect_XZ : Hitable {
-  beyond::Point2f min;
-  beyond::Point2f max;
+  beyond::Point2 min;
+  beyond::Point2 max;
   float y;
   NormalDirection direction;
   const Material* const material;
 
-  Rect_XZ(beyond::Point2f in_min, beyond::Point2f in_max, float in_y,
+  Rect_XZ(beyond::Point2 in_min, beyond::Point2 in_max, float in_y,
           const Material& mat, NormalDirection dir = NormalDirection::Positive)
       : min{in_min}, max{in_max}, y{in_y}, direction{dir}, material{&mat}
   {
@@ -56,13 +56,13 @@ struct Rect_XZ : Hitable {
 };
 
 struct Rect_YZ : Hitable {
-  beyond::Point2f min;
-  beyond::Point2f max;
+  beyond::Point2 min;
+  beyond::Point2 max;
   float x;
   NormalDirection direction;
   const Material* const material;
 
-  Rect_YZ(beyond::Point2f in_min, beyond::Point2f in_max, float in_x,
+  Rect_YZ(beyond::Point2 in_min, beyond::Point2 in_max, float in_x,
           const Material& mat, NormalDirection dir = NormalDirection::Positive)
       : min{in_min}, max{in_max}, x{in_x}, direction{dir}, material{&mat}
   {

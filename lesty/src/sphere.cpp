@@ -8,7 +8,7 @@ namespace lesty {
 
 auto Sphere::bounding_box() const -> AABB
 {
-  const beyond::Vector3f offset(radius, radius, radius);
+  const beyond::Vec3 offset(radius, radius, radius);
   return AABB{center - offset, center + offset, AABB::unchecked_tag};
 }
 

@@ -14,8 +14,8 @@ namespace lesty {
  * @warning Ray do not garentee that its direction is a unit vector
  */
 struct Ray {
-  beyond::Point3f origin = {0, 0, 0};
-  beyond::Vector3f direction = {1, 0, 0};
+  beyond::Point3 origin = {0, 0, 0};
+  beyond::Vec3 direction = {1, 0, 0};
 
   /**
    * @brief Default construct a ray with origin at <0,0,0> and facing 0
@@ -27,7 +27,7 @@ struct Ray {
    * @brief Construct a ray by its origin and direction
    * @related Ray
    */
-  constexpr Ray(beyond::Point3f a, beyond::Vector3f b)
+  constexpr Ray(beyond::Point3 a, beyond::Vec3 b)
       : origin{std::move(a)}, direction{std::move(b)}
   {
   }
@@ -38,7 +38,7 @@ struct Ray {
    *
    * @pre t >= 0
    */
-  constexpr beyond::Point3f point_at_parameter(float t) const noexcept
+  constexpr beyond::Point3 point_at_parameter(float t) const noexcept
   {
     assert(t >= 0);
     return origin + t * direction;

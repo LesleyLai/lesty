@@ -47,7 +47,8 @@ template <typename Duration>
   }
 }
 
-int main(int argc, char** argv) try {
+int main(int argc, char** argv)
+try {
   using namespace std::chrono;
   using namespace beyond::literals;
 
@@ -166,15 +167,15 @@ int main(int argc, char** argv) try {
     }
   }
 
-  auto parse_point2f = [](nlohmann::json pt_json) {
-    return beyond::Point2f{pt_json.at(0).get<float>(),
-                           pt_json.at(1).get<float>()};
+  auto parse_point2 = [](nlohmann::json pt_json) {
+    return beyond::Point2{pt_json.at(0).get<float>(),
+                          pt_json.at(1).get<float>()};
   };
 
-  auto parse_point3f = [](nlohmann::json pt_json) {
-    return beyond::Point3f{pt_json.at(0).get<float>(),
-                           pt_json.at(1).get<float>(),
-                           pt_json.at(2).get<float>()};
+  auto parse_point3 = [](nlohmann::json pt_json) {
+    return beyond::Point3{pt_json.at(0).get<float>(),
+                          pt_json.at(1).get<float>(),
+                          pt_json.at(2).get<float>()};
   };
 
   const auto materials_count = materials.size();
@@ -191,8 +192,8 @@ int main(int argc, char** argv) try {
     const auto& material = *materials[material_id];
 
     if (type.starts_with("Rect")) {
-      auto min = parse_point2f(obj_json["min"]);
-      auto max = parse_point2f(obj_json["max"]);
+      auto min = parse_point2(obj_json["min"]);
+      auto max = parse_point2(obj_json["max"]);
 
       auto normal_direction = (obj_json["normal_direction"] > 0)
                                   ? NormalDirection::Positive
@@ -211,7 +212,7 @@ int main(int argc, char** argv) try {
         throw std::runtime_error(fmt::format("Invalid object type {}\n", type));
       }
     } else if (type == "Sphere") {
-      auto center = parse_point3f(obj_json["center"]);
+      auto center = parse_point3(obj_json["center"]);
 
       objects.emplace_back(std::make_unique<Sphere>(
           center, obj_json["radius"].get<float>(), material));

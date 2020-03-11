@@ -27,12 +27,12 @@ public:
   /**
    * @brief initialize an AABB to enclose a single point:
    */
-  explicit constexpr AABB(beyond::Point3f p) noexcept : min_{p}, max_{p} {}
+  explicit constexpr AABB(beyond::Point3 p) noexcept : min_{p}, max_{p} {}
 
   /**
    * @brief Construction an AABB from two points
    */
-  constexpr AABB(beyond::Point3f p1, beyond::Point3f p2) noexcept
+  constexpr AABB(beyond::Point3 p1, beyond::Point3 p2) noexcept
       : min_{std::min(p1.x, p2.x), std::min(p1.y, p2.y), std::min(p1.z, p2.z)},
         max_{std::max(p1.x, p2.x), std::max(p1.y, p2.y), std::max(p1.z, p2.z)}
   {
@@ -43,18 +43,17 @@ public:
    * @warning This function does not check whether the two points are actually
    * minimal or maximum corner
    */
-  constexpr AABB(beyond::Point3f min, beyond::Point3f max,
-                 UncheckedTag) noexcept
+  constexpr AABB(beyond::Point3 min, beyond::Point3 max, UncheckedTag) noexcept
       : min_{min}, max_{max}
   {
   }
 
-  [[nodiscard]] constexpr beyond::Point3f min() const
+  [[nodiscard]] constexpr beyond::Point3 min() const
   {
     return min_;
   }
 
-  [[nodiscard]] constexpr beyond::Point3f max() const
+  [[nodiscard]] constexpr beyond::Point3 max() const
   {
     return max_;
   }
@@ -75,8 +74,9 @@ public:
       if (invD < 0) {
         std::swap(t0, t1);
       }
-      t_min = t0 > t_min ? t0 : t_min;
-      t_max = t1 < t_max ? t1 : t_max;
+      t_min = std::max(t0, t_min);
+      t_max = std::min(t1, t_max);
+
       if (t_max <= t_min)
         return false;
     }
@@ -109,8 +109,8 @@ public:
   }
 
 private:
-  beyond::Point3f min_ = {};
-  beyond::Point3f max_ = {};
+  beyond::Point3 min_ = {};
+  beyond::Point3 max_ = {};
 };
 
 [[nodiscard]] auto to_string(const AABB& box) -> std::string;

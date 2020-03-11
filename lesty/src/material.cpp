@@ -6,15 +6,14 @@
 #include "material.hpp"
 
 namespace {
-constexpr beyond::Vector3f reflect(beyond::Vector3f v,
-                                   beyond::Vector3f n) noexcept
+constexpr beyond::Vec3 reflect(beyond::Vec3 v, beyond::Vec3 n) noexcept
 {
   return v - 2 * dot(v, n) * n;
 }
 
 // Refraction by snell's law
-std::optional<beyond::Vector3f> refract(beyond::Vector3f v, beyond::Vector3f n,
-                                        float ni_over_nt) noexcept
+std::optional<beyond::Vec3> refract(beyond::Vec3 v, beyond::Vec3 n,
+                                    float ni_over_nt) noexcept
 {
   const auto uv = v / v.length();
   float dt = dot(uv, n);
@@ -25,7 +24,7 @@ std::optional<beyond::Vector3f> refract(beyond::Vector3f v, beyond::Vector3f n,
   return std::nullopt;
 }
 
-beyond::Vector3f random_in_unit_sphere()
+beyond::Vec3 random_in_unit_sphere()
 {
   // Credit:
   // https://math.stackexchange.com/questions/87230/picking-random-points-in-the-volume-of-sphere-with-uniform-probability/87238#87238
@@ -33,7 +32,7 @@ beyond::Vector3f random_in_unit_sphere()
   thread_local std::uniform_real_distribution<float> uni(-1, 1);
   thread_local std::normal_distribution<float> normal(0, 1);
 
-  beyond::Vector3f p{normal(gen), normal(gen), normal(gen)};
+  beyond::Vec3 p{normal(gen), normal(gen), normal(gen)};
   p = normalize(p);
 
   const auto c = std::cbrt(uni(gen));
@@ -76,7 +75,7 @@ std::optional<Ray> Metal::scatter(const Ray& ray_in,
 std::optional<Ray> Dielectric::scatter(const Ray& ray_in,
                                        const HitRecord& record) const
 {
-  beyond::Vector3f out_normal;
+  beyond::Vec3 out_normal;
   float ni_over_nt;
   float cosine;
   if (dot(ray_in.direction, record.normal) > 0) {
