@@ -31,7 +31,7 @@ auto Sphere::intersect_at(const Ray& r, float t_min, float t_max) const
   const auto t2 = (-b + sqrt_delta) / (2 * a);
 
   auto hit_record_from_t = [&r, this](float t) {
-    const auto point = r.point_at_parameter(t);
+    const auto point = r(t);
     const auto normal = (point - center) / radius;
 
     HitRecord record{t, point, normal, material};

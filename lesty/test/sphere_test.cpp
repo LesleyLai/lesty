@@ -11,14 +11,14 @@ using lesty::Sphere;
 static const lesty::Lambertian dummy_mat{Color(0.5f, 0.5f, 0.5f)};
 constexpr float inf = std::numeric_limits<float>::infinity();
 
-TEST_CASE("AABBs for sphere", "[geometry] [AABB]")
+TEST_CASE("AABBs for sphere", "[geometry] [sphere] [AABB]")
 {
   Sphere sphere{{0, 0, 2}, 1, dummy_mat};
   const auto box = sphere.bounding_box();
   REQUIRE(box == AABB({-1, -1, 1}, {1, 1, 3}));
 }
 
-TEST_CASE("Ray-Sphere intersection", "[geometry]")
+TEST_CASE("Ray-Sphere intersection", "[geometry] [sphere]")
 {
   Ray ray({0, 0, 0}, {0, 0, 1});
 

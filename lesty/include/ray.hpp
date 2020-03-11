@@ -35,12 +35,9 @@ struct Ray {
   /**
    * @brief Gets the result point after we put the parameter t into the ray
    * function
-   *
-   * @pre t >= 0
    */
-  constexpr beyond::Point3 point_at_parameter(float t) const noexcept
+  constexpr beyond::Point3 operator()(float t) const noexcept
   {
-    assert(t >= 0);
     return origin + t * direction;
   }
 };

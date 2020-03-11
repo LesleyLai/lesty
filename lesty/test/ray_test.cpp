@@ -27,7 +27,7 @@ TEST_CASE("Ray", "[geometry]")
   {
     Ray ray{origin, direction};
     const auto expect_dest = origin + 3.f * direction;
-    const auto dest = ray.point_at_parameter(3);
+    const auto dest = ray(3);
 
     REQUIRE(expect_dest.x == Approx(dest.x));
     REQUIRE(expect_dest.y == Approx(dest.y));

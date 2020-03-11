@@ -26,7 +26,7 @@ namespace lesty {
     return std::nullopt;
   }
 
-  return HitRecord{t, r.point_at_parameter(t),
+  return HitRecord{t, r(t),
                    flip_negative_normal(beyond::Vec3(0, 0, 1), direction),
                    material};
 }
@@ -45,7 +45,7 @@ namespace lesty {
     return std::nullopt;
   }
 
-  return HitRecord{t, r.point_at_parameter(t),
+  return HitRecord{t, r(t),
                    flip_negative_normal(beyond::Vec3(0, 1, 0), direction),
                    material};
 }
@@ -64,7 +64,7 @@ namespace lesty {
     return std::nullopt;
   }
 
-  return HitRecord{t, r.point_at_parameter(t),
+  return HitRecord{t, r(t),
                    flip_negative_normal(beyond::Vec3(1, 0, 0), direction),
                    material};
 }
