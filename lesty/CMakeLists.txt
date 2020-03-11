@@ -18,7 +18,7 @@ add_library(lesty
         src/sphere.cpp
         include/scene.hpp
         include/tile.hpp
-        src/scene.cpp src/aabb.cpp)
+        src/scene.cpp src/aabb.cpp src/triangle.cpp include/triangle.hpp)
 
 target_link_libraries(lesty
         PUBLIC
