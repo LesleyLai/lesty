@@ -20,3 +20,11 @@ endif ()
 
 add_subdirectory(lesty)
 add_subdirectory(lesty-cli)
+
+# Copy assets
+add_custom_target(lesty_scenes
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/scenes ${CMAKE_BINARY_DIR}/bin
+        )
+
+add_dependencies(lesty lesty_scenes)

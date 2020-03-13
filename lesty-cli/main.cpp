@@ -28,6 +28,7 @@
 #include "pathtracer.hpp"
 #include "scene.hpp"
 #include "sphere.hpp"
+#include "triangle.hpp"
 
 using namespace lesty;
 
@@ -216,6 +217,11 @@ try {
 
       objects.emplace_back(std::make_unique<Sphere>(
           center, obj_json["radius"].get<float>(), material));
+    } else if (type == "Triangle") {
+      const auto tri_json = obj_json["points"];
+      objects.emplace_back(std::make_unique<Triangle>(
+          parse_point3(tri_json.at(0)), parse_point3(tri_json.at(1)),
+          parse_point3(tri_json.at(2)), material));
     } else {
       throw std::runtime_error(fmt::format("Invalid object type {}\n", type));
     }
@@ -227,7 +233,7 @@ try {
 
   const auto aspect_ratio =
       static_cast<float>(width) / static_cast<float>(height);
-  Camera camera{
+  const Camera camera{
       {278, 278, -800}, {278, 278, 0}, {0, 1, 0}, 40.0_deg, aspect_ratio};
   const auto scene =
       Scene(std::make_unique<BVH_node>(objects.begin(), objects.end()),
