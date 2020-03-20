@@ -79,7 +79,6 @@ void Path_tracer::run(const Scene& scene, const Camera& camera, Image& image,
 
             for (size_t j = 0; j < tile.height(); ++j) {
               for (size_t i = 0; i < tile.width(); ++i) {
-
                 Color c;
                 thread_local std::mt19937 gen =
                     std::mt19937{std::random_device{}()};

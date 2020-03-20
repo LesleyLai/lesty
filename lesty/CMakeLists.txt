@@ -18,7 +18,7 @@ add_library(lesty
         src/sphere.cpp
         include/scene.hpp
         include/tile.hpp
-        src/scene.cpp src/aabb.cpp src/triangle.cpp include/triangle.hpp)
+        src/scene.cpp src/aabb.cpp src/triangle.cpp include/triangle.hpp include/scene_parser.cpp include/scene_parser.hpp)
 
 target_link_libraries(lesty
         PUBLIC
@@ -26,6 +26,7 @@ target_link_libraries(lesty
         CONAN_PKG::stb
         indicators::indicators
         PRIVATE
+        CONAN_PKG::nlohmann_json
         lesty::compiler_options
         )
 target_include_directories(lesty PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
