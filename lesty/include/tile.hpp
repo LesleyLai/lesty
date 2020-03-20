@@ -8,50 +8,58 @@
 
 namespace lesty {
 
+struct TileDesc {
+  size_t start_x = 0;
+  size_t start_y = 0;
+  size_t width = 0;
+  size_t height = 0;
+};
+
 struct Tile {
 public:
   Tile() = default;
 
-  Tile(size_t startX, size_t startY, size_t width, size_t height)
-      : startX_{startX}, startY_{startY}, width_{width}, height_{height}
+  explicit Tile(const TileDesc& desc)
+      : start_x_{desc.start_x}, start_y_{desc.start_y}, width_{desc.width},
+        height_{desc.height}
   {
     data_.resize(width_ * height_);
   }
 
-  Color at(size_t i, size_t j) const
+  [[nodiscard]] auto at(size_t i, size_t j) const -> Color
   {
     assert(i < width_);
     assert(j < height_);
     return data_[j * width_ + i];
   }
 
-  Color& at(size_t i, size_t j)
+  [[nodiscard]] auto at(size_t i, size_t j) -> Color&
   {
     assert(i < width_);
     assert(j < height_);
     return data_[j * width_ + i];
   }
 
-  size_t height() const
+  [[nodiscard]] auto height() const -> size_t
   {
     return height_;
   }
-  size_t width() const
+  [[nodiscard]] auto width() const -> size_t
   {
     return width_;
   }
-  size_t startX() const
+  [[nodiscard]] auto start_x() const -> size_t
   {
-    return startX_;
+    return start_x_;
   }
-  size_t startY() const
+  [[nodiscard]] auto start_y() const -> size_t
   {
-    return startY_;
+    return start_y_;
   }
 
 private:
-  size_t startX_ = 0;
-  size_t startY_ = 0;
+  size_t start_x_ = 0;
+  size_t start_y_ = 0;
   size_t width_ = 0;
   size_t height_ = 0;
   std::vector<Color> data_{};

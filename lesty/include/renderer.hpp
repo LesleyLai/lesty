@@ -8,6 +8,7 @@
 
 #include "camera.hpp"
 #include "image.hpp"
+#include "tile.hpp"
 
 namespace lesty {
 
@@ -21,11 +22,25 @@ struct Options {
 
 class Scene;
 
+// A tile is a 32X32 pixel area of an image
+constexpr size_t tile_size = 32;
+
 class Renderer {
+  size_t width_ = 0;
+  size_t height_ = 0;
+  size_t sample_per_pixel_ = 0;
+  Camera camera_;
+
   std::function<void(double progress)> set_progress_;
 
 public:
   enum class Type { path };
+
+  Renderer(size_t width, size_t height, size_t sample_per_pixel, Camera camera)
+      : width_{width}, height_{height},
+        sample_per_pixel_{sample_per_pixel}, camera_{std::move(camera)}
+  {
+  }
 
   virtual ~Renderer() = default;
 
@@ -52,8 +67,26 @@ public:
     }
   }
 
+  [[nodiscard]] auto width() const -> size_t
+  {
+    return width_;
+  }
+  [[nodiscard]] auto height() const -> size_t
+  {
+    return height_;
+  }
+  [[nodiscard]] auto sample_per_pixel() const -> size_t
+  {
+    return sample_per_pixel_;
+  }
+  [[nodiscard]] auto camera() const -> const Camera&
+  {
+    return camera_;
+  }
+
 private:
-  [[nodiscard]] virtual auto render_impl(const Scene& scene) -> Image = 0;
+  virtual auto render_tile(const TileDesc& tile_desc, const Scene& scene)
+      -> Tile = 0;
 };
 
 [[nodiscard]] auto create_renderers(Renderer::Type type, const Options& options)

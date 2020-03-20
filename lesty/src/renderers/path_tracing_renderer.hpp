@@ -16,21 +16,16 @@ struct Ray;
 struct Color;
 
 class PathTracingRenderer : public Renderer {
-  size_t width_;
-  size_t height_;
-  size_t sample_per_pixel_;
-  Camera camera_;
-
 public:
   PathTracingRenderer(size_t width, size_t height, size_t sample_per_pixel,
                       Camera camera)
-      : width_{width}, height_{height},
-        sample_per_pixel_{sample_per_pixel}, camera_{std::move(camera)}
+      : Renderer(width, height, sample_per_pixel, camera)
   {
   }
 
 private:
-  [[nodiscard]] auto render_impl(const Scene& scene) -> Image;
+  auto render_tile(const TileDesc& tile_desc, const Scene& scene)
+      -> Tile override;
 };
 
 } // namespace lesty
