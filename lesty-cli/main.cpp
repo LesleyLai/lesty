@@ -1,8 +1,6 @@
 #include <chrono>
 #include <cstdio>
-#include <fstream>
 #include <iostream>
-#include <memory>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -21,6 +19,8 @@
 #include "image.hpp"
 #include "pathtracer.hpp"
 #include "scene_parser.hpp"
+
+#include <indicators/progress_bar.hpp>
 
 using namespace lesty;
 
@@ -53,7 +53,7 @@ try {
   // clang-format off
   options.add_options()
   ("h,help", "Print help")
-  ("i,input", "File name of the input", cxxopts::value<std::string>());
+  ("i,input_filename", "File name of the input_filename", cxxopts::value<std::string>());
   // clang-format on
 
   // clang-format off
@@ -68,7 +68,7 @@ try {
   ("height","Height of the output image in pixels",cxxopts::value<size_t>()->default_value("600"));
   // clang-format on
 
-  options.parse_positional({"input"});
+  options.parse_positional({"input_filename"});
 
   const auto print_help = [options]() {
     std::puts(options.help({"", "Renderer", "Output"}).c_str());
@@ -88,31 +88,46 @@ try {
     exit(0);
   }
 
-  const auto input = [&]() {
-    if (result.count("input")) {
-      return result["input"].as<std::string>();
+  const auto input_filename = [&]() {
+    if (result.count("input_filename")) {
+      return result["input_filename"].as<std::string>();
     } else {
-      std::fputs("Error: Need an input file\n\n", stderr);
+      std::fputs("Error: Need an input_filename file\n\n", stderr);
       std::exit(-1);
     }
   }();
-  fmt::print("input file: {}\n", input);
+  fmt::print("input_filename file: {}\n", input_filename);
 
   const auto spp = result["spp"].as<size_t>();
   const auto width = result["width"].as<size_t>();
   const auto height = result["height"].as<size_t>();
-  const auto output_file = result["output"].as<std::string>();
+  const auto output_filename = result["output"].as<std::string>();
 
   fmt::print("width: {}, height: {}, sample size: {}\n", width, height, spp);
 
-  std::ifstream input_file{input};
+  std::ifstream input_file{input_filename};
   if (!input_file.is_open()) {
-    fmt::print(stderr, "Error: cannot open file \"{}\"\n", input);
+    fmt::print(stderr, "Error: cannot open file \"{}\"\n", input_filename);
     std::exit(2);
   }
   const auto scene = parse_scene(input_file);
 
   Path_tracer path_tracer;
+
+  indicators::ProgressBar progress_bar{
+      indicators::option::BarWidth{50},
+      indicators::option::Start{"["},
+      indicators::option::Fill{"="},
+      indicators::option::Lead{">"},
+      indicators::option::Remainder{" "},
+      indicators::option::End{"]"},
+      indicators::option::PostfixText{"Rendering"},
+      indicators::option::ShowPercentage{true},
+      indicators::option::ForegroundColor{indicators::Color::green}};
+
+  path_tracer.set_progress_callback([&progress_bar](double progress) {
+    progress_bar.set_progress(progress);
+  });
 
   Image image(width, height);
 
@@ -129,8 +144,8 @@ try {
   std::fflush(stdout);
   fmt::print("Elapsed time: {}\n", get_elapse_time(end - start));
 
-  image.saveto(output_file);
-  fmt::print("Save image to {}\n", output_file);
+  image.saveto(output_filename);
+  fmt::print("Save image to {}\n", output_filename);
   return 0;
 } catch (const std::exception& e) {
   fmt::print(stderr, "Error: {}\n", e.what());

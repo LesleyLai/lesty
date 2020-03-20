@@ -30,7 +30,8 @@ public:
   /**
    * @brief Returns the hit record at the closet hit point
    */
-  Maybe_hit_t intersect_at(const Ray& r) const noexcept;
+  [[nodiscard]] auto intersect_at(const Ray& r) const
+      -> std::optional<HitRecord>;
 
 private:
   std::unique_ptr<const Hitable> aggregate_ = nullptr;

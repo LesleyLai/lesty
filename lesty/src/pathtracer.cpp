@@ -43,18 +43,7 @@ struct PixelData {
 };
 
 constexpr size_t tile_size = 32;
-Path_tracer::Path_tracer()
-    : progress_bar_{
-          indicators::option::BarWidth{50},
-          indicators::option::Start{"["},
-          indicators::option::Fill{"="},
-          indicators::option::Lead{">"},
-          indicators::option::Remainder{" "},
-          indicators::option::End{"]"},
-          indicators::option::PostfixText{"Rendering"},
-          indicators::option::ForegroundColor{indicators::Color::green}}
-{
-}
+Path_tracer::Path_tracer() {}
 
 void Path_tracer::run(const Scene& scene, const Camera& camera, Image& image,
                       size_t sample_per_pixel)
@@ -98,10 +87,9 @@ void Path_tracer::run(const Scene& scene, const Camera& camera, Image& image,
             }
 
             ++progress_tick;
-            progress_bar_.set_progress(
+            set_progress_(
                 static_cast<size_t>(static_cast<double>(progress_tick.load()) /
                                     static_cast<double>(tile_count) * 100.));
-
             return tile;
           }));
     }

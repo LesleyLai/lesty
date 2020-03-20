@@ -3,6 +3,7 @@ target_link_libraries(lesty-cli
         PRIVATE
         lesty::compiler_options
         lesty::lesty
+        indicators::indicators
         cxxopts::cxxopts
         )
 add_clangformat(lesty-cli)

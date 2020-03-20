@@ -18,13 +18,17 @@ add_library(lesty
         src/sphere.cpp
         include/scene.hpp
         include/tile.hpp
-        src/scene.cpp src/aabb.cpp src/triangle.cpp include/triangle.hpp include/scene_parser.cpp include/scene_parser.hpp)
+        src/scene.cpp src/aabb.cpp
+        include/triangle.hpp
+        src/triangle.cpp
+        include/scene_parser.hpp
+        src/scene_parser.cpp
+        )
 
 target_link_libraries(lesty
         PUBLIC
         beyond::core
         CONAN_PKG::stb
-        indicators::indicators
         PRIVATE
         CONAN_PKG::nlohmann_json
         lesty::compiler_options
