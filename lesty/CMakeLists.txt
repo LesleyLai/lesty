@@ -11,8 +11,8 @@ add_library(lesty
         include/hitable.hpp
         include/material.hpp
         src/material.cpp
-        include/pathtracer.hpp
-        src/pathtracer.cpp
+        src/renderers/path_tracing_renderer.hpp
+        src/renderers/path_tracing_renderer.cpp
         include/ray.hpp
         include/sphere.hpp
         src/sphere.cpp
@@ -23,7 +23,8 @@ add_library(lesty
         src/triangle.cpp
         include/scene_parser.hpp
         src/scene_parser.cpp
-        )
+        src/renderer.cpp
+        include/renderer.hpp)
 
 target_link_libraries(lesty
         PUBLIC

@@ -17,7 +17,7 @@
 #include <fmt/format.h>
 
 #include "image.hpp"
-#include "pathtracer.hpp"
+#include "renderer.hpp"
 #include "scene_parser.hpp"
 
 #include <indicators/progress_bar.hpp>
@@ -39,14 +39,6 @@ template <typename Duration>
     return fmt::format("{}min {}s", s / 60, s % 60);
   }
 }
-
-struct Options {
-  std::size_t spp;
-  std::size_t width;
-  std::size_t height;
-  std::string input_filename;
-  std::string output_filename;
-};
 
 [[nodiscard]] auto parse_cmd(int argc, char** argv) -> Options
 {
@@ -131,8 +123,7 @@ try {
     std::exit(2);
   }
   const auto scene = parse_scene(input_file);
-
-  Path_tracer path_tracer;
+  const auto renderer = lesty::create_renderers(Renderer::Type::path, options);
 
   indicators::ProgressBar progress_bar{
       indicators::option::BarWidth{50},
@@ -144,19 +135,12 @@ try {
       indicators::option::PostfixText{"Rendering"},
       indicators::option::ShowPercentage{true},
       indicators::option::ForegroundColor{indicators::Color::green}};
-  path_tracer.set_progress_callback([&progress_bar](double progress) {
+  renderer->set_progress_callback([&progress_bar](double progress) {
     progress_bar.set_progress(progress);
   });
 
-  Image image(options.width, options.height);
-
-  const auto aspect_ratio =
-      static_cast<float>(options.width) / static_cast<float>(options.height);
-  const Camera camera{
-      {278, 278, -800}, {278, 278, 0}, {0, 1, 0}, 40.0_deg, aspect_ratio};
-
   const auto start = std::chrono::system_clock::now();
-  path_tracer.run(scene, camera, image, options.spp);
+  const Image image = renderer->render(scene);
   const auto end = std::chrono::system_clock::now();
 
   std::fflush(stdout);

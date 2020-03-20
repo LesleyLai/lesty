@@ -8,6 +8,7 @@
 #include "camera.hpp"
 #include "hitable.hpp"
 #include "material.hpp"
+#include "renderer.hpp"
 
 namespace lesty {
 
