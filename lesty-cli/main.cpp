@@ -40,11 +40,16 @@ template <typename Duration>
   }
 }
 
-int main(int argc, char** argv)
-try {
-  using namespace std::chrono;
-  using namespace beyond::literals;
+struct Options {
+  std::size_t spp;
+  std::size_t width;
+  std::size_t height;
+  std::string input_filename;
+  std::string output_filename;
+};
 
+[[nodiscard]] auto parse_cmd(int argc, char** argv) -> Options
+{
   cxxopts::Options options("lesty",
                            "Command line interface of the lesty renderer");
 
@@ -52,8 +57,8 @@ try {
 
   // clang-format off
   options.add_options()
-  ("h,help", "Print help")
-  ("i,input_filename", "File name of the input_filename", cxxopts::value<std::string>());
+      ("h,help", "Print help")
+      ("i,input_filename", "File name of the input_filename", cxxopts::value<std::string>());
   // clang-format on
 
   // clang-format off
@@ -63,9 +68,9 @@ try {
 
   // clang-format off
   options.add_options("Output")
-  ("o,output", "File name of the output image", cxxopts::value<std::string>()->default_value("output.png"))
-  ("width","Width of the output image in pixels",cxxopts::value<size_t>()->default_value("800"))
-  ("height","Height of the output image in pixels",cxxopts::value<size_t>()->default_value("600"));
+      ("o,output", "File name of the output image", cxxopts::value<std::string>()->default_value("output.png"))
+      ("width","Width of the output image in pixels",cxxopts::value<size_t>()->default_value("800"))
+      ("height","Height of the output image in pixels",cxxopts::value<size_t>()->default_value("600"));
   // clang-format on
 
   options.parse_positional({"input_filename"});
@@ -105,9 +110,24 @@ try {
 
   fmt::print("width: {}, height: {}, sample size: {}\n", width, height, spp);
 
-  std::ifstream input_file{input_filename};
+  return Options{.spp = spp,
+                 .width = width,
+                 .height = height,
+                 .input_filename = input_filename,
+                 .output_filename = output_filename};
+}
+
+int main(int argc, char** argv)
+try {
+  using namespace std::chrono;
+  using namespace beyond::literals;
+
+  const auto options = parse_cmd(argc, argv);
+
+  std::ifstream input_file{options.input_filename};
   if (!input_file.is_open()) {
-    fmt::print(stderr, "Error: cannot open file \"{}\"\n", input_filename);
+    fmt::print(stderr, "Error: cannot open file \"{}\"\n",
+               options.input_filename);
     std::exit(2);
   }
   const auto scene = parse_scene(input_file);
@@ -124,28 +144,26 @@ try {
       indicators::option::PostfixText{"Rendering"},
       indicators::option::ShowPercentage{true},
       indicators::option::ForegroundColor{indicators::Color::green}};
-
   path_tracer.set_progress_callback([&progress_bar](double progress) {
     progress_bar.set_progress(progress);
   });
 
-  Image image(width, height);
+  Image image(options.width, options.height);
 
   const auto aspect_ratio =
-      static_cast<float>(width) / static_cast<float>(height);
+      static_cast<float>(options.width) / static_cast<float>(options.height);
   const Camera camera{
       {278, 278, -800}, {278, 278, 0}, {0, 1, 0}, 40.0_deg, aspect_ratio};
 
   const auto start = std::chrono::system_clock::now();
-
-  path_tracer.run(scene, camera, image, spp);
+  path_tracer.run(scene, camera, image, options.spp);
   const auto end = std::chrono::system_clock::now();
 
   std::fflush(stdout);
   fmt::print("Elapsed time: {}\n", get_elapse_time(end - start));
 
-  image.saveto(output_filename);
-  fmt::print("Save image to {}\n", output_filename);
+  image.saveto(options.output_filename);
+  fmt::print("Save image to {}\n", options.output_filename);
   return 0;
 } catch (const std::exception& e) {
   fmt::print(stderr, "Error: {}\n", e.what());

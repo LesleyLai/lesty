@@ -16,7 +16,7 @@ struct Color;
 class Path_tracer {
 
 public:
-  Path_tracer();
+  Path_tracer() = default;
 
   auto run(const Scene& scene, const Camera& camera, Image& image,
            size_t sample_per_pixel) -> void;

@@ -43,7 +43,6 @@ struct PixelData {
 };
 
 constexpr size_t tile_size = 32;
-Path_tracer::Path_tracer() {}
 
 void Path_tracer::run(const Scene& scene, const Camera& camera, Image& image,
                       size_t sample_per_pixel)
