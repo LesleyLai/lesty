@@ -37,6 +37,10 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(compiler_options INTERFACE -Werror)
     endif ()
 
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        target_compile_options(compiler_options INTERFACE -Wno-c99-extensions)
+    endif ()
+
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         target_compile_options(compiler_options
                 INTERFACE -Wmisleading-indentation

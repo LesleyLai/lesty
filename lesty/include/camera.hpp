@@ -25,8 +25,9 @@ public:
    * @param fov Field of view of the camera
    * @param aspect Aspect ratio of the screen
    */
-  Camera(beyond::Point3 position, beyond::Point3 lookat, beyond::Vec3 up,
-         beyond::Radianf fov, float aspect) noexcept
+  Camera(const beyond::Point3& position, const beyond::Point3& lookat,
+         const beyond::Vec3& up, const beyond::Radian& fov,
+         float aspect) noexcept
   {
     const float half_height = std::tan(fov.value() / 2);
     const float half_width = aspect * half_height;

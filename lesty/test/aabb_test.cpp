@@ -91,7 +91,8 @@ TEST_CASE("Compose AABBs", "[AABB]")
 
 TEST_CASE("AABB Serialization", "[AABB]")
 {
-  const auto expected = "AABB(min: point(0, 0, 0), max: point(1, 1, 1))";
+  const auto expected =
+      "AABB(min: point(0.0, 0.0, 0.0), max: point(1.0, 1.0, 1.0))";
 
   AABB box{{0, 0, 0}, {1, 1, 1}};
   REQUIRE(to_string(box) == expected);

@@ -1,13 +1,14 @@
 #include <cmath>
 #include <fstream>
-#include <regex>
+
+#include <ctre.hpp>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 
 #include "image.hpp"
 
-#include <cmath>
+#include <beyond/core/utils/panic.hpp>
 
 namespace {
 
@@ -33,9 +34,11 @@ Image::Image(size_t width, size_t height)
 
 void Image::saveto(const std::string& filename) const
 {
-  std::regex png{R"(.*\.png$)"};
-  if (!std::regex_match(filename, png)) {
-    throw Unsupported_image_extension{filename.c_str()};
+  static constexpr auto png_pattern = ctll::fixed_string{R"(.*\.png$)"};
+  if (ctre::match<png_pattern>(filename)) {
+    std::puts("Output to png file");
+  } else {
+    beyond::panic("Unsupported image extension");
   }
 
   std::vector<byte> buffer;

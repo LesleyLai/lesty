@@ -31,6 +31,7 @@ target_link_libraries(lesty
         beyond::core
         CONAN_PKG::stb
         PRIVATE
+        CONAN_PKG::CTRE
         CONAN_PKG::nlohmann_json
         lesty::compiler_options
         )
