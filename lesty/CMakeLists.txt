@@ -1,7 +1,5 @@
 add_library(lesty
         include/aabb.hpp
-        include/axis_aligned_rect.hpp
-        src/axis_aligned_rect.cpp
         include/bounding_volume_hierarchy.hpp
         src/bounding_volume_hierarchy.cpp
         include/image.hpp
@@ -14,13 +12,16 @@ add_library(lesty
         src/renderers/path_tracing_renderer.hpp
         src/renderers/path_tracing_renderer.cpp
         include/ray.hpp
-        include/sphere.hpp
-        src/sphere.cpp
         include/scene.hpp
         include/tile.hpp
-        src/scene.cpp src/aabb.cpp
-        include/triangle.hpp
-        src/triangle.cpp
+        src/scene.cpp
+        src/aabb.cpp
+        src/hitables/axis_aligned_rect.hpp
+        src/hitables/axis_aligned_rect.cpp
+        src/hitables/sphere.hpp
+        src/hitables/sphere.cpp
+        src/hitables/triangle.hpp
+        src/hitables/triangle.cpp
         include/scene_parser.hpp
         src/scene_parser.cpp
         src/renderer.cpp

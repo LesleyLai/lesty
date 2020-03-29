@@ -30,12 +30,10 @@ auto Sphere::intersection_with(const Ray& r, float t_min, float t_max) const
   const auto t1 = (-b - sqrt_delta) / (2 * a);
   const auto t2 = (-b + sqrt_delta) / (2 * a);
 
-  auto hit_record_from_t = [&r, this](float t) {
+  auto hit_record_from_t = [&r, this](float t) -> beyond::optional<HitRecord> {
     const auto point = r(t);
     const auto normal = (point - center) / radius;
-
-    HitRecord record{t, point, normal, material};
-    return beyond::optional<HitRecord>{beyond::in_place, record};
+    return HitRecord{t, point, normal, material};
   };
 
   // Get the smaller non-negative value of t1, t2

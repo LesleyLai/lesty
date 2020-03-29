@@ -1,9 +1,9 @@
 #include "scene_parser.hpp"
-#include "axis_aligned_rect.hpp"
 #include "bounding_volume_hierarchy.hpp"
+#include "hitables/axis_aligned_rect.hpp"
+#include "hitables/sphere.hpp"
+#include "hitables/triangle.hpp"
 #include "material.hpp"
-#include "sphere.hpp"
-#include "triangle.hpp"
 
 #include "nlohmann/json.hpp"
 

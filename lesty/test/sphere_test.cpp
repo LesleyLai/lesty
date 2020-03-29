@@ -1,5 +1,5 @@
+#include "../src/hitables/sphere.hpp"
 #include "ray.hpp"
-#include "sphere.hpp"
 #include <catch2/catch.hpp>
 #include <limits>
 

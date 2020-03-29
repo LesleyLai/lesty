@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include "triangle.hpp"
+#include "../src/hitables/triangle.hpp"
 
 static const lesty::Lambertian dummy_mat{lesty::Color(0.5f, 0.5f, 0.5f)};
 static constexpr float inf = std::numeric_limits<float>::infinity();
