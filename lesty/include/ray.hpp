@@ -3,7 +3,7 @@
 
 #include <cassert>
 
-#include <beyond/core/math/vector.hpp>
+#include <beyond/math/vector.hpp>
 
 namespace lesty {
 

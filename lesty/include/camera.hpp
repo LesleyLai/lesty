@@ -2,8 +2,8 @@
 #define LESTY_CAMERA_HPP
 
 #include "ray.hpp"
-#include <beyond/core/math/angle.hpp>
-#include <beyond/core/math/vector.hpp>
+#include <beyond/math/angle.hpp>
+#include <beyond/math/vector.hpp>
 
 namespace lesty {
 

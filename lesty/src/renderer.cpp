@@ -6,7 +6,7 @@
 
 #include "scene.hpp"
 
-#include <beyond/core/utils/assert.hpp>
+#include <beyond/utils/assert.hpp>
 #include <future>
 #include <random>
 
@@ -26,8 +26,8 @@ auto Renderer::render(const Scene& scene) -> Image
   const std::size_t tile_count = height_ * width_ / tile_size / tile_size + 1;
   auto tick_progress = [this, &progress_tick, tile_count]() {
     ++progress_tick;
-    set_progress(static_cast<size_t>(static_cast<double>(progress_tick.load()) /
-                                     static_cast<double>(tile_count) * 100.));
+    set_progress(static_cast<double>(progress_tick.load()) /
+                 static_cast<double>(tile_count) * 100.);
   };
 
   for (size_t y = 0; y < height_; y += tile_size) {

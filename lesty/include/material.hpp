@@ -4,7 +4,7 @@
 #include <optional>
 #include <variant>
 
-#include <beyond/core/math/angle.hpp>
+#include <beyond/math/angle.hpp>
 
 #include "color.hpp"
 #include "hitable.hpp"

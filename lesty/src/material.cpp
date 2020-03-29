@@ -1,7 +1,7 @@
 #include <optional>
 #include <random>
 
-#include <beyond/core/math/vector.hpp>
+#include <beyond/math/vector.hpp>
 
 #include "material.hpp"
 

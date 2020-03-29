@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <iosfwd>
 
-#include <beyond/core/math/vector.hpp>
+#include <beyond/math/vector.hpp>
 
-#include <beyond/core/math/serial.hpp>
+#include <beyond/math/serial.hpp>
 
 #include "ray.hpp"
 

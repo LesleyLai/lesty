@@ -4,7 +4,7 @@
 #define LESTY_TRIANGLE_HPP
 
 #include <array>
-#include <beyond/core/math/vector.hpp>
+#include <beyond/math/vector.hpp>
 #include <optional>
 
 #include "hitable.hpp"

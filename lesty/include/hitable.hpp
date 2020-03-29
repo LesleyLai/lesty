@@ -3,7 +3,7 @@
 
 #include <optional>
 
-#include <beyond/core/math/vector.hpp>
+#include <beyond/math/vector.hpp>
 
 #include "aabb.hpp"
 

@@ -1,7 +1,7 @@
 #ifndef LESTY_AXIS_ALIGNED_RECT_HPP
 #define LESTY_AXIS_ALIGNED_RECT_HPP
 
-#include <beyond/core/math/vector.hpp>
+#include <beyond/math/vector.hpp>
 
 #include "hitable.hpp"
 #include "material.hpp"
