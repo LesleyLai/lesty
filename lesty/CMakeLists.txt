@@ -20,8 +20,7 @@ add_library(lesty
         src/hitables/axis_aligned_rect.cpp
         src/hitables/sphere.hpp
         src/hitables/sphere.cpp
-        src/hitables/triangle.hpp
-        src/hitables/triangle.cpp
+        src/triangle.hpp
         include/scene_parser.hpp
         src/scene_parser.cpp
         src/renderer.cpp

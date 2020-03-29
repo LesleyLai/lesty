@@ -2,8 +2,8 @@
 #include "bounding_volume_hierarchy.hpp"
 #include "hitables/axis_aligned_rect.hpp"
 #include "hitables/sphere.hpp"
-#include "hitables/triangle.hpp"
 #include "material.hpp"
+#include "triangle.hpp"
 
 #include "nlohmann/json.hpp"
 
@@ -109,11 +109,11 @@ namespace lesty {
 
       objects.emplace_back(std::make_unique<Sphere>(
           center, obj_json["radius"].get<float>(), material));
-    } else if (type == "Triangle") {
-      const auto tri_json = obj_json["points"];
-      objects.emplace_back(std::make_unique<Triangle>(
-          parse_point3(tri_json.at(0)), parse_point3(tri_json.at(1)),
-          parse_point3(tri_json.at(2)), material));
+      //    } else if (type == "Triangle") {
+      //      const auto tri_json = obj_json["points"];
+      //      objects.emplace_back(std::make_unique<Triangle>(
+      //          parse_point3(tri_json.at(0)), parse_point3(tri_json.at(1)),
+      //          parse_point3(tri_json.at(2)), material));
     } else {
       throw std::runtime_error(fmt::format("Invalid object type {}\n", type));
     }
