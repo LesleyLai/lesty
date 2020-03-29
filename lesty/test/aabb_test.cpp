@@ -49,44 +49,45 @@ TEST_CASE("AABB construction", "AABB")
 
 TEST_CASE("Ray/AABB intersection", "[AABB]")
 {
-  const AABB box(Point3(0, 0, 0), Point3(1, 1, 1), AABB::unchecked_tag);
+  const AABB box({0, 0, 0}, {1, 1, 1}, AABB::unchecked_tag);
 
   SECTION("Intersect with ray that penetrates its middle")
   {
     const Ray r({0.5, -1, 0.5}, {0, 1, 0});
-    REQUIRE(box.hit(r, 0, inf) == true);
+    REQUIRE(box.is_intersect_with(r, 0, inf));
   }
 
   SECTION("Intersect with ray that penetrates its conner")
   {
     const Ray r({0, -0.5f, 0}, {0, 1, 1});
-    REQUIRE(box.hit(r, 0, inf) == true);
+    REQUIRE(box.is_intersect_with(r, 0, inf));
   }
 
   SECTION("Not intersect with ray of divert direction")
   {
     const Ray r({0, -1, 0}, {1, 1, 1});
-    REQUIRE(box.hit(r, 0, inf) == false);
+    REQUIRE(!box.is_intersect_with(r, 0, inf));
   }
 
   SECTION("Not intersect with ray of negative direction")
   {
     const Ray r({0.5, -1, 0.5}, {0, -1, 0});
-    REQUIRE(box.hit(r, 0, inf) == false);
+    REQUIRE(!box.is_intersect_with(r, 0, inf));
   }
 
   SECTION("Not intersect with limited t")
   {
     const Ray r({0.5f, -1, 0.5f}, {0, 1, 0});
-    REQUIRE(box.hit(r, 0, 0.9f) == false);
+    REQUIRE(!box.is_intersect_with(r, 0, 0.9f));
   }
 }
 
 TEST_CASE("Compose AABBs", "[AABB]")
 {
-  AABB box0{{0, 0, 0}, {1, 1, 1}};
-  AABB box1{{-1, -1, -1}, {0.5, 0.5, 0.5}};
-  REQUIRE(aabb_union(box0, box1) == AABB{{-1, -1, -1}, {1, 1, 1}});
+  AABB box0{{0, 0, 0}, {1, 1, 1}, AABB::unchecked_tag};
+  AABB box1{{-1, -1, -1}, {0.5, 0.5, 0.5}, AABB::unchecked_tag};
+  REQUIRE(aabb_union(box0, box1) ==
+          AABB{{-1, -1, -1}, {1, 1, 1}, AABB::unchecked_tag});
 }
 
 TEST_CASE("AABB Serialization", "[AABB]")
@@ -94,7 +95,7 @@ TEST_CASE("AABB Serialization", "[AABB]")
   const auto expected =
       "AABB(min: point(0.0, 0.0, 0.0), max: point(1.0, 1.0, 1.0))";
 
-  AABB box{{0, 0, 0}, {1, 1, 1}};
+  AABB box{{0, 0, 0}, {1, 1, 1}, AABB::unchecked_tag};
   REQUIRE(to_string(box) == expected);
 
   std::stringstream ss;

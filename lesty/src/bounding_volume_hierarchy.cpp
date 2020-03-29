@@ -20,7 +20,7 @@ struct Never_hitable : lesty::Hitable {
 
   auto intersection_with(const lesty::Ray& /*r*/, float /*t_min*/,
                          float /*t_max*/) const
-      -> std::optional<lesty::HitRecord> override
+      -> beyond::optional<lesty::HitRecord> override
   {
     return {};
   }
@@ -82,11 +82,11 @@ BVH_node::BVH_node(const ObjectIterator& begin,
 }
 
 auto BVH_node::intersection_with(const Ray& r, float t_min, float t_max) const
-    noexcept -> std::optional<HitRecord>
+    noexcept -> beyond::optional<HitRecord>
 {
   assert(left_ != nullptr && right_ != nullptr);
 
-  if (!box_.hit(r, t_min, t_max)) {
+  if (!box_.is_intersect_with(r, t_min, t_max)) {
     return {};
   }
 

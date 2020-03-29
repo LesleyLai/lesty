@@ -18,9 +18,9 @@ namespace lesty {
  */
 class AABB {
 public:
-  struct UncheckedTag {
+  struct unchecked_tag_t {
   };
-  static constexpr UncheckedTag unchecked_tag{};
+  static constexpr unchecked_tag_t unchecked_tag{};
 
   constexpr AABB() noexcept = default;
 
@@ -43,17 +43,18 @@ public:
    * @warning This function does not check whether the two points are actually
    * minimal or maximum corner
    */
-  constexpr AABB(beyond::Point3 min, beyond::Point3 max, UncheckedTag) noexcept
+  constexpr AABB(beyond::Point3 min, beyond::Point3 max,
+                 unchecked_tag_t) noexcept
       : min_{min}, max_{max}
   {
   }
 
-  [[nodiscard]] constexpr beyond::Point3 min() const
+  [[nodiscard]] constexpr auto min() const noexcept -> beyond::Point3
   {
     return min_;
   }
 
-  [[nodiscard]] constexpr beyond::Point3 max() const
+  [[nodiscard]] constexpr auto max() const noexcept -> beyond::Point3
   {
     return max_;
   }
@@ -61,8 +62,8 @@ public:
   /**
    * @brief Whether the ray r hit AABB or not
    */
-  [[nodiscard]] constexpr auto hit(const Ray& r, float t_min, float t_max) const
-      -> bool
+  [[nodiscard]] constexpr auto is_intersect_with(const Ray& r, float t_min,
+                                                 float t_max) const -> bool
   {
     constexpr std::size_t num_dim = 3;
     // Credit: Andrew Kensler at Pixar adapt this version of AABB hit method

@@ -1,9 +1,8 @@
 #ifndef LESTY_HITABLE_HPP
 #define LESTY_HITABLE_HPP
 
-#include <optional>
-
 #include <beyond/math/vector.hpp>
+#include <beyond/types/optional.hpp>
 
 #include "aabb.hpp"
 
@@ -20,13 +19,16 @@ struct HitRecord {
   beyond::Point3 point{}; ///< Intersection point
   beyond::Vec3
       normal{}; ///< Surface normal, need to be construct as a unit vector
-  const Material* const material{};
+  const Material* material{};
 };
 
-using Maybe_hit_t = std::optional<HitRecord>;
-
 struct Hitable {
+  Hitable() = default;
   virtual ~Hitable() = default;
+  Hitable(const Hitable&) = delete;
+  auto operator=(const Hitable&) = delete;
+  Hitable(Hitable&&) = delete;
+  auto operator=(Hitable&&) = delete;
 
   /**
    * @brief Get the bounding box of an object
@@ -41,7 +43,7 @@ struct Hitable {
    */
   [[nodiscard]] virtual auto intersection_with(const Ray& r, float t_min,
                                                float t_max) const
-      -> std::optional<HitRecord> = 0;
+      -> beyond::optional<HitRecord> = 0;
 };
 
 } // namespace lesty

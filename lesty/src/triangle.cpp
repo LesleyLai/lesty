@@ -4,7 +4,7 @@ namespace lesty {
 
 [[nodiscard]] auto Triangle::intersection_with(const Ray& r, float t_min,
                                                float t_max) const
-    -> std::optional<HitRecord>
+    -> beyond::optional<HitRecord>
 {
 
   const auto vd = r.direction;
@@ -37,18 +37,21 @@ namespace lesty {
 
   // compute t
   const auto t = -(f * ak_jb + e * jc_al + d * bl_kc) / M;
-  if ((t < t_min) || (t > t_max))
+  if ((t < t_min) || (t > t_max)) {
     return {};
+  }
 
   // compute gamma
   const auto gamma = (i * ak_jb + h * jc_al + g * bl_kc) / M;
-  if ((gamma < 0) || (gamma > 1))
+  if ((gamma < 0) || (gamma > 1)) {
     return {};
+  }
 
   // compute beta
   const auto beta = (j * ei_hf + k * gf_di + l * dh_eg) / M;
-  if ((beta < 0) || (beta > (1 - gamma)))
+  if ((beta < 0) || (beta > (1 - gamma))) {
     return {};
+  }
 
   const auto n = normal();
   return HitRecord{t, r(t), n, material};

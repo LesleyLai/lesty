@@ -22,13 +22,14 @@ struct Rect_XY : Hitable {
   {
   }
 
-  [[nodiscard]] AABB bounding_box() const override
+  [[nodiscard]] auto bounding_box() const -> AABB override
   {
     return AABB{{min, z - 0.0001f}, {max, z + 0.0001f}};
   }
 
-  [[nodiscard]] Maybe_hit_t intersection_with(const Ray& r, float t_min,
-                                              float t_max) const override;
+  [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
+                                       float t_max) const
+      -> beyond::optional<HitRecord> override;
 
   const Material* const material;
 };
@@ -46,13 +47,14 @@ struct Rect_XZ : Hitable {
   {
   }
 
-  [[nodiscard]] AABB bounding_box() const override
+  [[nodiscard]] auto bounding_box() const -> AABB override
   {
     return AABB{{min.x, y - 0.0001f, min.y}, {max.x, y + 0.0001f, max.y}};
   }
 
-  [[nodiscard]] Maybe_hit_t intersection_with(const Ray& r, float t_min,
-                                              float t_max) const override;
+  [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
+                                       float t_max) const
+      -> beyond::optional<HitRecord> override;
 };
 
 struct Rect_YZ : Hitable {
@@ -68,13 +70,14 @@ struct Rect_YZ : Hitable {
   {
   }
 
-  [[nodiscard]] AABB bounding_box() const override
+  [[nodiscard]] auto bounding_box() const -> AABB override
   {
     return AABB{{x - 0.0001f, min.x, min.y}, {x + 0.0001f, max.x, max.y}};
   }
 
-  [[nodiscard]] Maybe_hit_t intersection_with(const Ray& r, float t_min,
-                                              float t_max) const override;
+  [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
+                                       float t_max) const
+      -> beyond::optional<HitRecord> override;
 };
 
 } // namespace lesty

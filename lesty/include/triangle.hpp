@@ -26,7 +26,7 @@ struct Triangle : Hitable {
 
   [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
                                        float t_max) const
-      -> std::optional<HitRecord> override;
+      -> beyond::optional<HitRecord> override;
 
   // Calculate the normal of a triangle
   [[nodiscard]] constexpr auto normal() const -> beyond::Vec3;

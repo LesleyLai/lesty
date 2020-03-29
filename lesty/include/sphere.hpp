@@ -17,6 +17,7 @@ namespace lesty {
 struct Sphere : Hitable {
   beyond::Point3 center{};
   float radius = 1;
+  const Material* material;
 
   Sphere(beyond::Point3 c, float r, const Material& mat)
       : center{c}, radius{r}, material{&mat}
@@ -31,9 +32,7 @@ struct Sphere : Hitable {
    */
   [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
                                        float t_max) const
-      -> std::optional<HitRecord> override;
-
-  const Material* const material;
+      -> beyond::optional<HitRecord> override;
 };
 
 } // namespace lesty

@@ -13,7 +13,7 @@ auto Sphere::bounding_box() const -> AABB
 }
 
 auto Sphere::intersection_with(const Ray& r, float t_min, float t_max) const
-    -> std::optional<HitRecord>
+    -> beyond::optional<HitRecord>
 {
   const auto oc = r.origin - center;
 
@@ -23,7 +23,7 @@ auto Sphere::intersection_with(const Ray& r, float t_min, float t_max) const
   const auto discrimination = b * b - 4 * a * c;
 
   if (discrimination < 0) {
-    return std::nullopt;
+    return {};
   }
 
   const auto sqrt_delta = std::sqrt(discrimination);
@@ -35,7 +35,7 @@ auto Sphere::intersection_with(const Ray& r, float t_min, float t_max) const
     const auto normal = (point - center) / radius;
 
     HitRecord record{t, point, normal, material};
-    return std::optional<HitRecord>{std::in_place, record};
+    return beyond::optional<HitRecord>{beyond::in_place, record};
   };
 
   // Get the smaller non-negative value of t1, t2
@@ -45,7 +45,7 @@ auto Sphere::intersection_with(const Ray& r, float t_min, float t_max) const
   if (t2 >= t_min && t2 < t_max) {
     return hit_record_from_t(t2);
   }
-  return std::nullopt;
+  return {};
 }
 
 } // namespace lesty
