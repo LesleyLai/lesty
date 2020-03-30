@@ -3,6 +3,7 @@
 
 #include <cassert>
 
+#include <beyond/math/point.hpp>
 #include <beyond/math/vector.hpp>
 
 namespace lesty {
@@ -27,16 +28,13 @@ struct Ray {
    * @brief Construct a ray by its origin and direction
    * @related Ray
    */
-  constexpr Ray(beyond::Point3 a, beyond::Vec3 b)
-      : origin{std::move(a)}, direction{std::move(b)}
-  {
-  }
+  constexpr Ray(beyond::Point3 a, beyond::Vec3 b) : origin{a}, direction{b} {}
 
   /**
    * @brief Gets the result point after we put the parameter t into the ray
    * function
    */
-  constexpr beyond::Point3 operator()(float t) const noexcept
+  constexpr auto operator()(float t) const noexcept -> beyond::Point3
   {
     return origin + t * direction;
   }
