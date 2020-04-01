@@ -3,16 +3,16 @@
 #include <future>
 #include <random>
 
+#include "beyond/geometry/ray.hpp"
 #include "camera.hpp"
 #include "color.hpp"
 #include "image.hpp"
 #include "material.hpp"
-#include "ray.hpp"
 #include "scene.hpp"
 
 namespace lesty {
 
-[[nodiscard]] auto trace(const Scene& scene, const Ray& ray,
+[[nodiscard]] auto trace(const Scene& scene, const beyond::Ray& ray,
                          size_t depth = 0) noexcept -> Color
 {
   constexpr size_t max_depth = 100;

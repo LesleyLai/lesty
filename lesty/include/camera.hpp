@@ -1,7 +1,7 @@
 #ifndef LESTY_CAMERA_HPP
 #define LESTY_CAMERA_HPP
 
-#include "ray.hpp"
+#include "beyond/geometry/ray.hpp"
 #include <beyond/math/angle.hpp>
 #include <beyond/math/vector.hpp>
 
@@ -45,12 +45,12 @@ public:
   /**
    * @brief Generate a ray by uv coodinate
    */
-  [[nodiscard]] auto get_ray(Camera_sample sample) const noexcept -> Ray
+  [[nodiscard]] auto get_ray(Camera_sample sample) const noexcept -> beyond::Ray
   {
     const float u = sample.film_pos.x;
     const float v = sample.film_pos.y;
-    return Ray{origin_,
-               lower_left_corner_ + u * horizontal_ + v * vertical_ - origin_};
+    return beyond::Ray{origin_, lower_left_corner_ + u * horizontal_ +
+                                    v * vertical_ - origin_};
   }
 
 private:

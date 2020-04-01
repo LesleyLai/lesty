@@ -43,6 +43,10 @@ public:
   }
 
   virtual ~Renderer() = default;
+  Renderer(const Renderer&) = delete;
+  auto operator=(const Renderer&) & -> Renderer& = delete;
+  Renderer(Renderer&&) = delete;
+  auto operator=(Renderer&&) & -> Renderer& = delete;
 
   /// @brief Render the scene to an image
   [[nodiscard]] auto render(const Scene& scene) -> Image;

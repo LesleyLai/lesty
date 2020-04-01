@@ -36,7 +36,7 @@ template <typename Duration>
     return fmt::format("{}s\n", duration_cast<seconds>(elapsed_time).count());
   } else {
     auto s = duration_cast<seconds>(elapsed_time).count();
-    return fmt::format("{}min {}s", s / 60, s % 60);
+    return fmt::format("{} min {}s", s / 60, s % 60);
   }
 }
 
@@ -109,7 +109,7 @@ template <typename Duration>
                  .output_filename = output_filename};
 }
 
-int main(int argc, char** argv)
+auto main(int argc, char** argv) -> int
 try {
   using namespace std::chrono;
   using namespace beyond::literals;

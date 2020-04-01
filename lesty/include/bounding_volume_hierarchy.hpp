@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "aabb.hpp"
+#include "beyond/geometry/aabb3.hpp"
 #include "hitable.hpp"
 
 namespace lesty {
@@ -15,19 +15,19 @@ class BVH_node : public Hitable {
 public:
   BVH_node(const ObjectIterator& begin, const ObjectIterator& end) noexcept;
 
-  [[nodiscard]] auto bounding_box() const noexcept -> AABB override
+  [[nodiscard]] auto bounding_box() const noexcept -> beyond::AABB3 override
   {
     return box_;
   }
 
-  [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
+  [[nodiscard]] auto intersection_with(const beyond::Ray& r, float t_min,
                                        float t_max) const noexcept
       -> beyond::optional<HitRecord> override;
 
 private:
   std::unique_ptr<const Hitable> left_ = nullptr;
   std::unique_ptr<const Hitable> right_ = nullptr;
-  AABB box_;
+  beyond::AABB3 box_;
 };
 
 } // namespace lesty

@@ -6,9 +6,9 @@
 
 #include <beyond/math/angle.hpp>
 
+#include "beyond/geometry/ray.hpp"
 #include "color.hpp"
 #include "hitable.hpp"
-#include "ray.hpp"
 
 namespace lesty {
 
@@ -24,15 +24,16 @@ public:
    * @param record
    * @return scattered ray if the incident ray is not absorbed
    */
-  virtual std::optional<Ray> scatter(const Ray& ray_in,
-                                     const HitRecord& record) const = 0;
+  [[nodiscard]] virtual auto scatter(const beyond::Ray& ray_in,
+                                     const HitRecord& record) const
+      -> std::optional<beyond::Ray> = 0;
 
-  virtual Color emitted() const
+  [[nodiscard]] virtual auto emitted() const -> Color
   {
     return Color{};
   }
 
-  constexpr Color albedo() const noexcept
+  [[nodiscard]] constexpr auto albedo() const noexcept -> Color
   {
     return albedo_;
   }
@@ -45,8 +46,9 @@ class Lambertian : public Material {
 public:
   explicit Lambertian(Color albedo) noexcept : Material{albedo} {}
 
-  std::optional<Ray> scatter(const Ray& ray_in,
-                             const HitRecord& record) const override;
+  [[nodiscard]] auto scatter(const beyond::Ray& ray_in,
+                             const HitRecord& record) const
+      -> std::optional<beyond::Ray> override;
 };
 
 class Metal : public Material {
@@ -56,8 +58,9 @@ public:
   {
   }
 
-  std::optional<Ray> scatter(const Ray& ray_in,
-                             const HitRecord& record) const override;
+  [[nodiscard]] auto scatter(const beyond::Ray& ray_in,
+                             const HitRecord& record) const
+      -> std::optional<beyond::Ray> override;
 
 private:
   float fuzzness_;
@@ -70,8 +73,9 @@ public:
   {
   }
 
-  std::optional<Ray> scatter(const Ray& ray_in,
-                             const HitRecord& record) const override;
+  [[nodiscard]] auto scatter(const beyond::Ray& ray_in,
+                             const HitRecord& record) const
+      -> std::optional<beyond::Ray> override;
 
 private:
   float refractive_index_;
@@ -81,9 +85,10 @@ class Emission : public Material {
 public:
   explicit Emission(Color emit) noexcept : emit_(emit) {}
 
-  std::optional<Ray> scatter(const Ray& ray_in,
-                             const HitRecord& record) const override;
-  Color emitted() const override;
+  [[nodiscard]] auto scatter(const beyond::Ray& ray_in,
+                             const HitRecord& record) const
+      -> std::optional<beyond::Ray> override;
+  [[nodiscard]] auto emitted() const -> Color override;
 
 private:
   Color emit_;

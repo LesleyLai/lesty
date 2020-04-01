@@ -5,11 +5,11 @@
 static const lesty::Lambertian dummy_mat{lesty::Color(0.5f, 0.5f, 0.5f)};
 static constexpr float inf = std::numeric_limits<float>::infinity();
 
-TEST_CASE("AABBs for triangle", "[geometry] [AABB] [triangle]")
+TEST_CASE("AABBs for triangle", "[geometry] [AABB3] [triangle]")
 {
   const auto box =
       lesty::triangle_bounding_box({0, 1, 0}, {0, 0, 1}, {2, 1, 2});
-  REQUIRE(box == lesty::AABB({0, 0, 0}, {2, 1, 2}));
+  REQUIRE(box == beyond::AABB3({0, 0, 0}, {2, 1, 2}));
 }
 
 TEST_CASE("Ray-Triangle intersection", "[geometry] [triangle]")
@@ -27,7 +27,7 @@ TEST_CASE("Ray-Triangle intersection", "[geometry] [triangle]")
 
     AND_GIVEN("A ray r that intersects the triangle")
     {
-      const lesty::Ray r({0, 0, 2}, {0, 0, -1});
+      const beyond::Ray r({0, 0, 2}, {0, 0, -1});
 
       THEN("Intersect at (0, 0, 0)")
       {
@@ -42,7 +42,7 @@ TEST_CASE("Ray-Triangle intersection", "[geometry] [triangle]")
 
     AND_GIVEN("A ray r that misses p1-p2 edge")
     {
-      const lesty::Ray r({-1, 1, -2}, {0, 0, 1});
+      const beyond::Ray r({-1, 1, -2}, {0, 0, 1});
       THEN("The triangle tri and ray r do not intersect")
       {
         const auto hit =
@@ -53,7 +53,7 @@ TEST_CASE("Ray-Triangle intersection", "[geometry] [triangle]")
 
     AND_GIVEN("A ray r that misses p1-p3 edge")
     {
-      const lesty::Ray r({1, 1, -2}, {0, 0, 1});
+      const beyond::Ray r({1, 1, -2}, {0, 0, 1});
       THEN("The triangle tri and ray r do not intersect")
       {
         const auto hit =
@@ -64,7 +64,7 @@ TEST_CASE("Ray-Triangle intersection", "[geometry] [triangle]")
 
     AND_GIVEN("A ray r that misses p2-p3 edge")
     {
-      const lesty::Ray r({0, -1, -2}, {0, 0, 1});
+      const beyond::Ray r({0, -1, -2}, {0, 0, 1});
       THEN("The triangle tri and ray r do not intersect")
       {
         const auto hit =

@@ -12,7 +12,7 @@ constexpr beyond::Vec3 flip_negative_normal(beyond::Vec3 normal,
 
 namespace lesty {
 
-[[nodiscard]] auto Rect_XY::intersection_with(const Ray& r, float t_min,
+[[nodiscard]] auto Rect_XY::intersection_with(const beyond::Ray& r, float t_min,
                                               float t_max) const
     -> beyond::optional<HitRecord>
 {
@@ -32,7 +32,7 @@ namespace lesty {
                    material};
 }
 
-[[nodiscard]] auto Rect_XZ::intersection_with(const Ray& r, float t_min,
+[[nodiscard]] auto Rect_XZ::intersection_with(const beyond::Ray& r, float t_min,
                                               float t_max) const
     -> beyond::optional<HitRecord>
 {
@@ -52,7 +52,7 @@ namespace lesty {
                    material};
 }
 
-[[nodiscard]] auto Rect_YZ::intersection_with(const Ray& r, float t_min,
+[[nodiscard]] auto Rect_YZ::intersection_with(const beyond::Ray& r, float t_min,
                                               float t_max) const
     -> beyond::optional<HitRecord>
 {

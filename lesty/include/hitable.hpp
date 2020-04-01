@@ -1,14 +1,14 @@
 #ifndef LESTY_HITABLE_HPP
 #define LESTY_HITABLE_HPP
 
+#include <beyond/geometry/ray.hpp>
 #include <beyond/math/vector.hpp>
 #include <beyond/types/optional.hpp>
 
-#include "aabb.hpp"
+#include "beyond/geometry/aabb3.hpp"
 
 namespace lesty {
 
-struct Ray;
 class Material;
 
 /**
@@ -32,17 +32,17 @@ struct Hitable {
 
   /**
    * @brief Get the bounding box of an object
-   * @return An AABB for objects with bounding_box, nothing otherwise (for
+   * @return An AABB3 for objects with bounding_box, nothing otherwise (for
    * example, infinite plane)
    */
-  [[nodiscard]] virtual auto bounding_box() const -> AABB = 0;
+  [[nodiscard]] virtual auto bounding_box() const -> beyond::AABB3 = 0;
 
   /**
    * @brief Ray-object intersection detection
    * @return A optional record of intersection information, nothing if not hit
    */
-  [[nodiscard]] virtual auto intersection_with(const Ray& r, float t_min,
-                                               float t_max) const
+  [[nodiscard]] virtual auto intersection_with(const beyond::Ray& r,
+                                               float t_min, float t_max) const
       -> beyond::optional<HitRecord> = 0;
 };
 

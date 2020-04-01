@@ -6,23 +6,13 @@
 #include <string>
 #include <vector>
 
+#include <beyond/utils/panic.hpp>
+
+#include <fmt/format.h>
+
 #include "color.hpp"
 
 namespace lesty {
-
-struct Unsupported_image_extension : public std::invalid_argument {
-  explicit Unsupported_image_extension(const char* filename)
-      : std::invalid_argument{filename}
-  {
-  }
-};
-
-struct Cannot_write_file : public std::runtime_error {
-  explicit Cannot_write_file(const char* filename)
-      : std::runtime_error{filename}
-  {
-  }
-};
 
 class Image {
 public:
@@ -36,23 +26,23 @@ public:
    */
   void saveto(const std::string& filename) const;
 
-  size_t width() const
+  [[nodiscard]] auto width() const -> size_t
   {
     return width_;
   }
 
-  size_t height() const
+  [[nodiscard]] auto height() const -> size_t
   {
     return height_;
   }
 
-  Color color_at(size_t x, size_t y) const
+  [[nodiscard]] auto color_at(size_t x, size_t y) const -> Color
   {
     bound_checking(x, y);
     return data_[y * width_ + x];
   }
 
-  Color& color_at(size_t x, size_t y)
+  auto color_at(size_t x, size_t y) -> Color&
   {
     bound_checking(x, y);
     return data_[y * width_ + x];
@@ -62,11 +52,9 @@ private:
   void bound_checking(size_t x, size_t y) const
   {
     if (x >= width_ || y >= height_) {
-      std::stringstream ss;
-      ss << "Access image out of index:\n";
-      ss << "Input x:" << x << " y:" << y << "\n";
-      ss << "width:" << width_ << " height:" << height_ << "\n";
-      throw std::out_of_range{ss.str().c_str()};
+      beyond::panic(fmt::format("Access image out of range\nat x: {}, y: {}\n "
+                                "width: {}, height: {}\n",
+                                x, y, width_, height_));
     }
   }
 

@@ -24,13 +24,13 @@ struct Sphere : Hitable {
   {
   }
 
-  [[nodiscard]] auto bounding_box() const -> AABB override;
+  [[nodiscard]] auto bounding_box() const -> beyond::AABB3 override;
 
   /**
    * @brief Ray-sphere intersection detection
    * @see Hitable::intersection_with
    */
-  [[nodiscard]] auto intersection_with(const Ray& r, float t_min,
+  [[nodiscard]] auto intersection_with(const beyond::Ray& r, float t_min,
                                        float t_max) const
       -> beyond::optional<HitRecord> override;
 };

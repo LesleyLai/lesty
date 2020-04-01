@@ -2,18 +2,19 @@
 #include <random>
 
 #include <beyond/math/vector.hpp>
+#include <beyond/random/generators/xorshift32.hpp>
 
 #include "material.hpp"
 
 namespace {
-constexpr beyond::Vec3 reflect(beyond::Vec3 v, beyond::Vec3 n) noexcept
+constexpr auto reflect(beyond::Vec3 v, beyond::Vec3 n) noexcept -> beyond::Vec3
 {
   return v - 2 * dot(v, n) * n;
 }
 
 // Refraction by snell's law
-std::optional<beyond::Vec3> refract(beyond::Vec3 v, beyond::Vec3 n,
-                                    float ni_over_nt) noexcept
+auto refract(beyond::Vec3 v, beyond::Vec3 n, float ni_over_nt) noexcept
+    -> std::optional<beyond::Vec3>
 {
   const auto uv = v / v.length();
   float dt = dot(uv, n);
@@ -24,12 +25,13 @@ std::optional<beyond::Vec3> refract(beyond::Vec3 v, beyond::Vec3 n,
   return std::nullopt;
 }
 
-beyond::Vec3 random_in_unit_sphere()
+auto random_in_unit_sphere() -> beyond::Vec3
 {
   // Credit:
   // https://math.stackexchange.com/questions/87230/picking-random-points-in-the-volume-of-sphere-with-uniform-probability/87238#87238
-  thread_local std::mt19937 gen = std::mt19937{std::random_device{}()};
+  thread_local beyond::xorshift32 gen;
   thread_local std::uniform_real_distribution<float> uni(-1, 1);
+
   thread_local std::normal_distribution<float> normal(0, 1);
 
   beyond::Vec3 p{normal(gen), normal(gen), normal(gen)};
@@ -40,7 +42,7 @@ beyond::Vec3 random_in_unit_sphere()
 }
 
 // Reflectivity by Christophe Schlick
-float schlick(float cosine, float ref_idx)
+auto schlick(float cosine, float ref_idx) -> float
 {
   float r0 = (1 - ref_idx) / (1 + ref_idx);
   r0 *= r0;
@@ -51,15 +53,16 @@ float schlick(float cosine, float ref_idx)
 
 namespace lesty {
 
-std::optional<Ray> Lambertian::scatter(const Ray& /*ray_in*/,
-                                       const HitRecord& record) const
+auto Lambertian::scatter(const beyond::Ray& /*ray_in*/,
+                         const HitRecord& record) const
+    -> std::optional<beyond::Ray>
 {
   const auto target = record.point + record.normal + random_in_unit_sphere();
-  return Ray{record.point, target - record.point};
+  return beyond::Ray{record.point, target - record.point};
 }
 
-std::optional<Ray> Metal::scatter(const Ray& ray_in,
-                                  const HitRecord& record) const
+auto Metal::scatter(const beyond::Ray& ray_in, const HitRecord& record) const
+    -> std::optional<beyond::Ray>
 {
   auto incident_dir = ray_in.direction / ray_in.direction.length();
   auto reflected = reflect(incident_dir, record.normal) +
@@ -68,12 +71,12 @@ std::optional<Ray> Metal::scatter(const Ray& ray_in,
     return std::nullopt;
   }
 
-  Ray scattered{record.point, reflected};
-  return scattered;
+  return beyond::Ray{record.point, reflected};
 }
 
-std::optional<Ray> Dielectric::scatter(const Ray& ray_in,
-                                       const HitRecord& record) const
+auto Dielectric::scatter(const beyond::Ray& ray_in,
+                         const HitRecord& record) const
+    -> std::optional<beyond::Ray>
 {
   beyond::Vec3 out_normal;
   float ni_over_nt;
@@ -96,24 +99,25 @@ std::optional<Ray> Dielectric::scatter(const Ray& ray_in,
     reflection_prob = schlick(cosine, refractive_index_);
   }
 
-  static std::uniform_real_distribution<float> dis(0, 1);
-  thread_local std::mt19937 gen = std::mt19937{std::random_device{}()};
+  std::uniform_real_distribution<float> dis(0, 1);
+  thread_local beyond::xorshift32 gen;
 
   if (dis(gen) < reflection_prob) {
     auto incident_dir = ray_in.direction / ray_in.direction.length();
     auto reflection = reflect(incident_dir, record.normal);
-    return Ray(record.point, reflection);
+    return beyond::Ray(record.point, reflection);
   }
-  return Ray(record.point, *refraction);
+  return beyond::Ray(record.point, *refraction);
 }
 
-std::optional<Ray> Emission::scatter(const Ray& /*ray_in*/,
-                                     const HitRecord& /*record*/) const
+auto Emission::scatter(const beyond::Ray& /*ray_in*/,
+                       const HitRecord& /*record*/) const
+    -> std::optional<beyond::Ray>
 {
   return {};
 }
 
-Color Emission::emitted() const
+auto Emission::emitted() const -> Color
 {
   return emit_;
 }

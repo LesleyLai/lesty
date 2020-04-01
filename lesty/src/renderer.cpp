@@ -12,7 +12,7 @@
 
 namespace lesty {
 
-[[nodiscard]] auto trace(const Scene& scene, const Ray& ray,
+[[nodiscard]] auto trace(const Scene& scene, const beyond::Ray& ray,
                          size_t depth = 0) noexcept -> Color;
 
 auto Renderer::render(const Scene& scene) -> Image

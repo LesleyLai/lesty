@@ -10,7 +10,8 @@ namespace lesty {
  * a HitRecord struct if the ray intersects the sphere
  */
 
-auto Scene::intersect_at(const Ray& r) const -> beyond::optional<HitRecord>
+auto Scene::intersect_at(const beyond::Ray& r) const
+    -> beyond::optional<HitRecord>
 {
   assert(aggregate_ != nullptr);
   return aggregate_->intersection_with(r, 0.001f,

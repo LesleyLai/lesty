@@ -31,7 +31,7 @@ public:
   /**
    * @brief Returns the hit record at the closet hit point
    */
-  [[nodiscard]] auto intersect_at(const Ray& r) const
+  [[nodiscard]] auto intersect_at(const beyond::Ray& r) const
       -> beyond::optional<HitRecord>;
 
 private:

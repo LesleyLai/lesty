@@ -1,26 +1,24 @@
 #include "../src/hitables/sphere.hpp"
-#include "ray.hpp"
+#include "beyond/geometry/ray.hpp"
 #include <catch2/catch.hpp>
 #include <limits>
 
-using lesty::AABB;
 using lesty::Color;
-using lesty::Ray;
 using lesty::Sphere;
 
 static const lesty::Lambertian dummy_mat{Color(0.5f, 0.5f, 0.5f)};
 constexpr float inf = std::numeric_limits<float>::infinity();
 
-TEST_CASE("AABBs for sphere", "[geometry] [sphere] [AABB]")
+TEST_CASE("AABBs for sphere", "[geometry] [sphere] [AABB3]")
 {
   Sphere sphere{{0, 0, 2}, 1, dummy_mat};
   const auto box = sphere.bounding_box();
-  REQUIRE(box == AABB({-1, -1, 1}, {1, 1, 3}));
+  REQUIRE(box == beyond::AABB3({-1, -1, 1}, {1, 1, 3}));
 }
 
 TEST_CASE("Ray-Sphere intersection", "[geometry] [sphere]")
 {
-  Ray ray({0, 0, 0}, {0, 0, 1});
+  beyond::Ray ray({0, 0, 0}, {0, 0, 1});
 
   SECTION(
       "intersection_with returns nullopt if sphere does not intersect the ray")

@@ -15,13 +15,13 @@ namespace lesty {
 [[nodiscard]] constexpr auto triangle_bounding_box(const beyond::Point3& p0,
                                                    const beyond::Point3& p1,
                                                    const beyond::Point3& p2)
-    -> AABB
+    -> beyond::AABB3
 {
-  return aabb_union(AABB(p0, p1), AABB(p2));
+  return merge(beyond::AABB3(p0, p1), beyond::AABB3(p2));
 }
 
 [[nodiscard]] constexpr auto
-triangle_ray_intersection(const Ray& r, float t_min, float t_max,
+triangle_ray_intersection(const beyond::Ray& r, float t_min, float t_max,
                           const beyond::Point3& p1, const beyond::Point3& p2,
                           const beyond::Point3& p3) -> beyond::optional<float>
 {

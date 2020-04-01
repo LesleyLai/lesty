@@ -12,7 +12,6 @@
 namespace lesty {
 
 class Scene;
-struct Ray;
 struct Color;
 
 class PathTracingRenderer : public Renderer {

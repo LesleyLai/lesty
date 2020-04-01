@@ -19,11 +19,4 @@ TEST_CASE("Image", "[Graphics]")
     REQUIRE(result.g == Approx(0));
     REQUIRE(result.b == Approx(0));
   }
-
-  SECTION("Bound checking of color_at function")
-  {
-    REQUIRE_THROWS_AS(img.color_at(-1, -1), std::out_of_range);
-    REQUIRE_THROWS_AS(img.color_at(200, 0), std::out_of_range);
-    REQUIRE_THROWS_AS(img.color_at(0, 100), std::out_of_range);
-  }
 }

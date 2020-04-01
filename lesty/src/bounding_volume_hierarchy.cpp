@@ -8,18 +8,18 @@
 // A dummy object that you cannot hit
 namespace {
 struct Never_hitable : lesty::Hitable {
-  auto bounding_box() const -> lesty::AABB override
+  [[nodiscard]] auto bounding_box() const -> beyond::AABB3 override
   {
     constexpr auto min = std::numeric_limits<float>::min();
     constexpr auto max = std::numeric_limits<float>::max();
 
     // Returns a bounding box that do not bound to anything
-    return lesty::AABB{
-        {max, max, max}, {min, min, min}, lesty::AABB::unchecked_tag};
+    return beyond::AABB3{
+        {max, max, max}, {min, min, min}, beyond::AABB3::unchecked_tag};
   }
 
-  auto intersection_with(const lesty::Ray& /*r*/, float /*t_min*/,
-                         float /*t_max*/) const
+  [[nodiscard]] auto intersection_with(const beyond::Ray& /*r*/,
+                                       float /*t_min*/, float /*t_max*/) const
       -> beyond::optional<lesty::HitRecord> override
   {
     return {};
@@ -78,10 +78,11 @@ BVH_node::BVH_node(const ObjectIterator& begin,
     right_ = std::make_unique<BVH_node>(begin + size / 2, end);
   }
 
-  box_ = aabb_union(left_->bounding_box(), right_->bounding_box());
+  box_ = merge(left_->bounding_box(), right_->bounding_box());
 }
 
-auto BVH_node::intersection_with(const Ray& r, float t_min, float t_max) const
+[[nodiscard]] auto BVH_node::intersection_with(const beyond::Ray& r,
+                                               float t_min, float t_max) const
     noexcept -> beyond::optional<HitRecord>
 {
   assert(left_ != nullptr && right_ != nullptr);

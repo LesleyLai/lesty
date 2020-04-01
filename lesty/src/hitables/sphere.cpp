@@ -1,19 +1,20 @@
 #include <cmath>
 #include <utility>
 
-#include "ray.hpp"
+#include "beyond/geometry/ray.hpp"
 #include "sphere.hpp"
 
 namespace lesty {
 
-auto Sphere::bounding_box() const -> AABB
+auto Sphere::bounding_box() const -> beyond::AABB3
 {
   const beyond::Vec3 offset(radius, radius, radius);
-  return AABB{center - offset, center + offset, AABB::unchecked_tag};
+  return beyond::AABB3{center - offset, center + offset,
+                       beyond::AABB3::unchecked_tag};
 }
 
-auto Sphere::intersection_with(const Ray& r, float t_min, float t_max) const
-    -> beyond::optional<HitRecord>
+auto Sphere::intersection_with(const beyond::Ray& r, float t_min,
+                               float t_max) const -> beyond::optional<HitRecord>
 {
   const auto oc = r.origin - center;
 

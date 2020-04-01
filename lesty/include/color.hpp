@@ -32,7 +32,7 @@ struct Color {
   {
   }
 
-  constexpr Color& operator*=(float rhs) noexcept
+  constexpr auto operator*=(float rhs) noexcept -> Color&
   {
     r *= rhs;
     g *= rhs;
@@ -40,7 +40,7 @@ struct Color {
     return *this;
   }
 
-  constexpr Color& operator/=(float rhs) noexcept
+  constexpr auto operator/=(float rhs) noexcept -> Color&
   {
     r /= rhs;
     g /= rhs;
@@ -48,7 +48,7 @@ struct Color {
     return *this;
   }
 
-  constexpr Color& operator*=(const Color& rhs) noexcept
+  constexpr auto operator*=(const Color& rhs) noexcept -> Color&
   {
     r *= rhs.r;
     g *= rhs.g;
@@ -56,7 +56,7 @@ struct Color {
     return *this;
   }
 
-  constexpr Color& operator+=(const Color& rhs) noexcept
+  constexpr auto operator+=(const Color& rhs) noexcept -> Color&
   {
     r += rhs.r;
     g += rhs.g;
@@ -64,7 +64,7 @@ struct Color {
     return *this;
   }
 
-  constexpr Color& operator-=(const Color& rhs) noexcept
+  constexpr auto operator-=(const Color& rhs) noexcept -> Color&
   {
     r -= rhs.r;
     g -= rhs.g;
@@ -80,8 +80,9 @@ struct Color {
    * @param color The color to output.
    */
   template <class CharT, class Traits>
-  inline friend std::basic_ostream<CharT, Traits>&
-  operator<<(std::basic_ostream<CharT, Traits>& os, const Color& color)
+  inline friend auto operator<<(std::basic_ostream<CharT, Traits>& os,
+                                const Color& color)
+      -> std::basic_ostream<CharT, Traits>&
   {
     os << "Color(" << color.r << "," << color.g << "," << color.b << ")";
     return os;
@@ -98,37 +99,44 @@ struct Color {
   }
 };
 
-constexpr bool operator==(const Color& lhs, const Color& rhs) noexcept
+[[nodiscard]] constexpr auto operator==(const Color& lhs,
+                                        const Color& rhs) noexcept -> bool
 {
   return lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b;
 }
 
-constexpr Color operator+(const Color& lhs, const Color& rhs) noexcept
+[[nodiscard]] constexpr auto operator+(const Color& lhs,
+                                       const Color& rhs) noexcept -> Color
 {
   return Color(lhs.r + rhs.r, lhs.g + rhs.g, lhs.b + rhs.b);
 }
 
-constexpr Color operator-(const Color& lhs, const Color& rhs) noexcept
+[[nodiscard]] constexpr auto operator-(const Color& lhs,
+                                       const Color& rhs) noexcept -> Color
 {
   return Color(lhs.r - rhs.r, lhs.g - rhs.g, lhs.b - rhs.b);
 }
 
-constexpr Color operator*(const Color& lhs, const Color& rhs) noexcept
+[[nodiscard]] constexpr auto operator*(const Color& lhs,
+                                       const Color& rhs) noexcept -> Color
 {
   return Color(lhs.r * rhs.r, lhs.g * rhs.g, lhs.b * rhs.b);
 }
 
-constexpr Color operator*(const Color& c, float scalar) noexcept
+[[nodiscard]] constexpr auto operator*(const Color& c, float scalar) noexcept
+    -> Color
 {
   return Color(c.r * scalar, c.g * scalar, c.b * scalar);
 }
 
-constexpr Color operator/(const Color& c, float scalar) noexcept
+[[nodiscard]] constexpr auto operator/(const Color& c, float scalar) noexcept
+    -> Color
 {
   return Color(c.r / scalar, c.g / scalar, c.b / scalar);
 }
 
-constexpr Color operator*(float scalar, const Color& c) noexcept
+[[nodiscard]] constexpr auto operator*(float scalar, const Color& c) noexcept
+    -> Color
 {
   return Color(c.r * scalar, c.g * scalar, c.b * scalar);
 }

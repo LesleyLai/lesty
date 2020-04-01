@@ -3,10 +3,8 @@ set(TEST_TARGET_NAME ${PROJECT_NAME}_test)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_executable(${TEST_TARGET_NAME}
-        aabb_test.cpp
         color_test.cpp
         image_test.cpp
-        ray_test.cpp
         sphere_test.cpp
         scene_test.cpp
         tile_test.cpp
