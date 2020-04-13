@@ -24,7 +24,7 @@ public:
    *
    * Currently only support ppm as extension.
    */
-  void saveto(const std::string& filename) const;
+  void save_to(const std::string& filename) const;
 
   [[nodiscard]] auto width() const -> size_t
   {

@@ -146,7 +146,7 @@ try {
   std::fflush(stdout);
   fmt::print("Elapsed time: {}\n", get_elapse_time(end - start));
 
-  image.saveto(options.output_filename);
+  image.save_to(options.output_filename);
   fmt::print("Save image to {}\n", options.output_filename);
   return 0;
 } catch (const std::exception& e) {

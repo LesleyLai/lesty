@@ -1,9 +1,9 @@
 [requires]
 fmt/6.1.2
 gsl_microsoft/2.0.0@bincrafters/stable
-stb/20180214@conan/stable
+stb/20200203
 nlohmann_json/3.7.3
-CTRE/v2.7@ctre/stable
+CTRE/v2.8.2@ctre/stable
 
 [build_requires]
 Catch2/2.11.1@catchorg/stable

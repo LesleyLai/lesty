@@ -1,5 +1,4 @@
 #include <cmath>
-#include <fstream>
 
 #include <ctre.hpp>
 
@@ -32,9 +31,10 @@ Image::Image(size_t width, size_t height)
 {
 }
 
-void Image::saveto(const std::string& filename) const
+static constexpr auto png_pattern = ctll::fixed_string{R"(.*\.png$)"};
+
+void Image::save_to(const std::string& filename) const
 {
-  static constexpr auto png_pattern = ctll::fixed_string{R"(.*\.png$)"};
   if (ctre::match<png_pattern>(filename)) {
     std::puts("Output to png file");
   } else {
