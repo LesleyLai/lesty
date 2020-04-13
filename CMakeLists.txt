@@ -20,6 +20,7 @@ endif ()
 
 add_subdirectory(lesty)
 add_subdirectory(lesty-cli)
+add_subdirectory(lesty-intereactive)
 
 # Copy assets
 add_custom_target(lesty_scenes

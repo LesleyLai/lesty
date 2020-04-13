@@ -4,6 +4,7 @@ gsl_microsoft/2.0.0@bincrafters/stable
 stb/20200203
 nlohmann_json/3.7.3
 CTRE/v2.8.2@ctre/stable
+sdl2/2.0.12@bincrafters/stable
 
 [build_requires]
 Catch2/2.11.1@catchorg/stable

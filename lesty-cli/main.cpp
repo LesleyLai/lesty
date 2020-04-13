@@ -109,8 +109,7 @@ template <typename Duration>
                  .output_filename = output_filename};
 }
 
-auto main(int argc, char** argv) -> int
-try {
+auto main(int argc, char** argv) -> int try {
   using namespace std::chrono;
   using namespace beyond::literals;
 
@@ -136,7 +135,7 @@ try {
       indicators::option::ShowPercentage{true},
       indicators::option::ForegroundColor{indicators::Color::green}};
   renderer->set_progress_callback([&progress_bar](double progress) {
-    progress_bar.set_progress(progress);
+    progress_bar.set_progress(static_cast<std::size_t>(progress));
   });
 
   const auto start = std::chrono::system_clock::now();
