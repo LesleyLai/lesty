@@ -37,12 +37,13 @@ auto Renderer::render(const Scene& scene) -> Image
       assert(x < end_x && y < end_y);
       TileDesc tile_desc{x, y, end_x - x, end_y - y};
 
-      results.push_back(std::async(std::launch::async,
-                                   [this, tile_desc, &scene, &tick_progress] {
-                                     auto tile = render_tile(tile_desc, scene);
-                                     tick_progress();
-                                     return tile;
-                                   }));
+      results.push_back(std::async(std::launch::async, [this, tile_desc, &scene,
+                                                        &tick_progress] {
+        auto tile = render_tile_impl(tile_desc, scene,
+                                     static_cast<uint32_t>(sample_per_pixel()));
+        tick_progress();
+        return tile;
+      }));
     }
   }
 
@@ -58,7 +59,13 @@ auto Renderer::render(const Scene& scene) -> Image
     }
   }
   return image;
-} // namespace lesty
+}
+
+auto Renderer::render_tile(const TileDesc& tile_desc, const Scene& scene,
+                           std::uint32_t spp) -> Tile
+{
+  return render_tile_impl(tile_desc, scene, spp);
+}
 
 auto create_renderers(Renderer::Type type, const Options& options)
     -> std::unique_ptr<Renderer>

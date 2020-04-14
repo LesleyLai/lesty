@@ -23,8 +23,8 @@ public:
   }
 
 private:
-  auto render_tile(const TileDesc& tile_desc, const Scene& scene)
-      -> Tile override;
+  auto render_tile_impl(const TileDesc& tile_desc, const Scene& scene,
+                        std::uint32_t spp) -> Tile override;
 };
 
 } // namespace lesty

@@ -36,12 +36,12 @@ namespace lesty {
   return Color{};
 }
 
-auto PathTracingRenderer::render_tile(const TileDesc& tile_desc,
-                                      const Scene& scene) -> Tile
+auto PathTracingRenderer::render_tile_impl(const TileDesc& tile_desc,
+                                           const Scene& scene,
+                                           std::uint32_t spp) -> Tile
 {
   const auto f_width = static_cast<float>(width());
   const auto f_height = static_cast<float>(height());
-  const auto spp = sample_per_pixel();
 
   Tile tile(tile_desc);
 
@@ -53,7 +53,7 @@ auto PathTracingRenderer::render_tile(const TileDesc& tile_desc,
       Color c;
       thread_local std::mt19937 gen = std::mt19937{std::random_device{}()};
       std::uniform_real_distribution<float> dis(0.0, 1.0);
-      for (size_t sample = 0; sample < spp; ++sample) {
+      for (std::uint32_t sample = 0; sample < spp; ++sample) {
         const auto u = (f_x + dis(gen)) / f_width;
         const auto v = (f_y + dis(gen)) / f_height;
 
