@@ -13,11 +13,11 @@
 namespace lesty {
 
 struct Options {
-  std::size_t spp;
-  std::size_t width;
-  std::size_t height;
-  std::string input_filename;
-  std::string output_filename;
+  std::size_t spp = 0;
+  std::size_t width = 0;
+  std::size_t height = 0;
+  std::string input_filename{};
+  std::string output_filename{};
 };
 
 class Scene;
@@ -45,8 +45,8 @@ public:
   virtual ~Renderer() = default;
   Renderer(const Renderer&) = delete;
   auto operator=(const Renderer&) & -> Renderer& = delete;
-  Renderer(Renderer&&) = delete;
-  auto operator=(Renderer&&) & -> Renderer& = delete;
+  Renderer(Renderer&&) noexcept = delete;
+  auto operator=(Renderer&&) & noexcept -> Renderer& = delete;
 
   /// @brief Render the scene to an image
   [[nodiscard]] auto render(const Scene& scene) -> Image;

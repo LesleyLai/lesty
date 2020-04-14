@@ -109,7 +109,8 @@ template <typename Duration>
                  .output_filename = output_filename};
 }
 
-auto main(int argc, char** argv) -> int try {
+auto main(int argc, char** argv) -> int
+try {
   using namespace std::chrono;
   using namespace beyond::literals;
 

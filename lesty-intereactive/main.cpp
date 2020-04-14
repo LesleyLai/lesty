@@ -40,20 +40,20 @@ auto handle_input() -> void
   }
 }
 
-auto main(int argc, char** argv) -> int
+auto main() -> int
 {
   SDL_Init(SDL_INIT_VIDEO); // Initialize SDL2
 
-  const int width = 640;
-  const int height = 480;
+  const std::size_t width = 640;
+  const std::size_t height = 480;
 
   // Create an application window with the following settings:
   auto* window = SDL_CreateWindow("lesty-intereactive",    // window title
                                   SDL_WINDOWPOS_UNDEFINED, // initial x position
                                   SDL_WINDOWPOS_UNDEFINED, // initial y position
-                                  width,                   // width, in pixels
-                                  height,                  // height, in pixels
-                                  SDL_WINDOW_OPENGL        // flags - see below
+                                  static_cast<int>(width), // width, in pixels
+                                  static_cast<int>(height), // height, in pixels
+                                  SDL_WINDOW_OPENGL         // flags - see below
   );
   // Check that the window was successfully created
   if (window == nullptr) {
@@ -78,20 +78,24 @@ auto main(int argc, char** argv) -> int
       lesty::create_renderers(Renderer::Type::path, options);
   const auto image_out = lesty_renderer->render(scene);
 
-  for (auto y = 0; y < height; ++y) {
-    for (auto x = 0; x < width; ++x) {
+  for (size_t y = 0; y < height; ++y) {
+    for (size_t x = 0; x < width; ++x) {
       Color color = image_out.color_at(x, (height - y - 1));
-      const auto int_r = static_cast<uint32_t>(pow(color.r, 1 / 2.2) * 255.99f);
-      const auto int_g = static_cast<uint32_t>(pow(color.g, 1 / 2.2) * 255.99f);
-      const auto int_b = static_cast<uint32_t>(pow(color.b, 1 / 2.2) * 255.99f);
+      const auto int_r =
+          static_cast<uint32_t>(std::pow(color.r, 1 / 2.2f) * 255.99f);
+      const auto int_g =
+          static_cast<uint32_t>(std::pow(color.g, 1 / 2.2f) * 255.99f);
+      const auto int_b =
+          static_cast<uint32_t>(std::pow(color.b, 1 / 2.2f) * 255.99f);
       pixels[y * width + x] =
           0xFF000000 | (int_r << 16u) | (int_g << 8u) | int_b;
     }
   }
 
+  SDL_UpdateTexture(texture, nullptr, static_cast<void*>(pixels),
+                    width * sizeof(Uint32));
+
   while (running) {
-    SDL_UpdateTexture(texture, nullptr, static_cast<void*>(pixels),
-                      width * sizeof(Uint32));
 
     handle_input();
 
