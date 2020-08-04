@@ -36,19 +36,16 @@ namespace lesty {
   return Color{};
 }
 
-auto PathTracingRenderer::render_tile_impl(const TileDesc& tile_desc,
-                                           const Scene& scene,
-                                           std::uint32_t spp) -> Tile
+auto PathTracingRenderer::render_to_tile_impl(Tile& tile, const Scene& scene,
+                                              std::uint32_t spp) -> void
 {
   const auto f_width = static_cast<float>(width());
   const auto f_height = static_cast<float>(height());
 
-  Tile tile(tile_desc);
-
-  for (size_t j = 0; j < tile_desc.height; ++j) {
-    const auto f_y = static_cast<float>(tile_desc.start_y + j);
-    for (size_t i = 0; i < tile_desc.width; ++i) {
-      const auto f_x = static_cast<float>(tile_desc.start_x + i);
+  for (size_t j = 0; j < tile.height(); ++j) {
+    const auto f_y = static_cast<float>(tile.start_y() + j);
+    for (size_t i = 0; i < tile.width(); ++i) {
+      const auto f_x = static_cast<float>(tile.start_x() + i);
 
       Color c;
       thread_local std::mt19937 gen = std::mt19937{std::random_device{}()};
@@ -64,7 +61,6 @@ auto PathTracingRenderer::render_tile_impl(const TileDesc& tile_desc,
       tile.at(i, j) = c;
     }
   }
-  return tile;
 }
 
 } // namespace lesty

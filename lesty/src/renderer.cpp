@@ -39,8 +39,8 @@ auto Renderer::render(const Scene& scene) -> Image
 
       results.push_back(std::async(std::launch::async, [this, tile_desc, &scene,
                                                         &tick_progress] {
-        auto tile = render_tile_impl(tile_desc, scene,
-                                     static_cast<uint32_t>(sample_per_pixel()));
+        Tile tile{tile_desc};
+        render_to_tile(tile, scene, static_cast<uint32_t>(sample_per_pixel()));
         tick_progress();
         return tile;
       }));
@@ -61,10 +61,10 @@ auto Renderer::render(const Scene& scene) -> Image
   return image;
 }
 
-auto Renderer::render_tile(const TileDesc& tile_desc, const Scene& scene,
-                           std::uint32_t spp) -> Tile
+auto Renderer::render_to_tile(Tile& tile, const Scene& scene, std::uint32_t spp)
+    -> void
 {
-  return render_tile_impl(tile_desc, scene, spp);
+  render_to_tile_impl(tile, scene, spp);
 }
 
 auto create_renderers(Renderer::Type type, const Options& options)

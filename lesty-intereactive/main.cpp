@@ -90,8 +90,9 @@ auto main() -> int
       results.push_back(std::async(std::launch::async, [&lesty_renderer,
                                                         &pixels, tile_desc,
                                                         &scene] {
+        Tile tile{tile_desc};
         for (std::uint32_t spp = 8; spp < 1000; spp <<= 2u) {
-          auto tile = lesty_renderer->render_tile(tile_desc, scene, spp);
+          lesty_renderer->render_to_tile(tile, scene, spp);
 
           for (size_t y = 0; y < tile.height(); ++y) {
             const auto image_y = tile.start_y() + y;

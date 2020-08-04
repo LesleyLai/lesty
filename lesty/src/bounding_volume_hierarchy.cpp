@@ -33,32 +33,27 @@ BVH_node::BVH_node(const ObjectIterator& begin,
                    const ObjectIterator& end) noexcept
 {
   thread_local std::mt19937 gen = std::mt19937{std::random_device{}()};
+
+  const auto sort_by = [&](auto axis) {
+    std::sort(begin, end,
+              [axis](const std::unique_ptr<Hitable>& lhs,
+                     const std::unique_ptr<Hitable>& rhs) {
+                return lhs->bounding_box().min().*axis <
+                       rhs->bounding_box().min().*axis;
+              });
+  };
+
   std::uniform_int_distribution<int> dis(0, 2);
   int axis = dis(gen);
-  if (axis == 0) {
-    // Sort by x
-    std::sort(begin, end,
-              [](const std::unique_ptr<Hitable>& lhs,
-                 const std::unique_ptr<Hitable>& rhs) {
-                return lhs->bounding_box().min().x <
-                       rhs->bounding_box().min().x;
-              });
-  } else if (axis == 1) {
-    // Sort by y
-    std::sort(begin, end,
-              [](const std::unique_ptr<Hitable>& lhs,
-                 const std::unique_ptr<Hitable>& rhs) {
-                return lhs->bounding_box().min().y <
-                       rhs->bounding_box().min().y;
-              });
-  } else {
-    // Sort by z
-    std::sort(begin, end,
-              [](const std::unique_ptr<Hitable>& lhs,
-                 const std::unique_ptr<Hitable>& rhs) {
-                return lhs->bounding_box().min().z <
-                       rhs->bounding_box().min().z;
-              });
+  switch (axis) {
+  case 0:
+    sort_by(&beyond::Point3::x);
+    break;
+  case 1:
+    sort_by(&beyond::Point3::y);
+    break;
+  default:
+    sort_by(&beyond::Point3::z);
   }
 
   const auto size = end - begin;
@@ -82,8 +77,9 @@ BVH_node::BVH_node(const ObjectIterator& begin,
 }
 
 [[nodiscard]] auto BVH_node::intersection_with(const beyond::Ray& r,
-                                               float t_min, float t_max) const
-    noexcept -> beyond::optional<HitRecord>
+                                               float t_min,
+                                               float t_max) const noexcept
+    -> beyond::optional<HitRecord>
 {
   assert(left_ != nullptr && right_ != nullptr);
 

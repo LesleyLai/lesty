@@ -88,12 +88,12 @@ public:
     return camera_;
   }
 
-  auto render_tile(const TileDesc& tile_desc, const Scene& scene,
-                   std::uint32_t spp) -> Tile;
+  auto render_to_tile(Tile& tile, const Scene& scene, std::uint32_t spp)
+      -> void;
 
 private:
-  virtual auto render_tile_impl(const TileDesc& tile_desc, const Scene& scene,
-                                std::uint32_t spp) -> Tile = 0;
+  virtual auto render_to_tile_impl(Tile& tile, const Scene& scene,
+                                   std::uint32_t spp) -> void = 0;
 };
 
 [[nodiscard]] auto create_renderers(Renderer::Type type, const Options& options)
